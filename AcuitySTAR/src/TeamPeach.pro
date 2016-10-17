@@ -30,8 +30,8 @@ HEADERS += \
     datamodel/GrantFundingTreeModel.h \
     datamodel/TeachingTreeModel.h \
     database/TestCSVReader.h \
-    gui/qcustomplot.h
-
+    gui/qcustomplot.h \
+    testing/test.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -49,7 +49,8 @@ SOURCES += \
     datamodel/GrantFundingTreeModel.cpp \
     datamodel/TeachingTreeModel.cpp \
     database/TestCSVReader.cpp \
-    gui/qcustomplot.cpp
+    gui/qcustomplot.cpp \
+    testing/test.cpp
 
 FORMS += \
     gui/customsort.ui \
