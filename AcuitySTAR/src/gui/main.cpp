@@ -11,10 +11,15 @@ int main(int argc, char *argv[]) {
     int test = 1;   /* test off */
 
     if (test) {
+        //Initialize Test Classes
+        TestQString *test_string = new TestQString();
+        QTTestCSVReader *test_csv = new QTTestCSVReader();
 
-        TestQString *test_obj = new TestQString();
-        QTest::qExec(test_obj);
+        //Run Tests
+        QTest::qExec(test_string);
+        QTest::qExec(test_csv);
 
+        //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;
 //        bool pass = testReader.CSV_READER_TEST_01();
 //        if (pass) cout << "TEST_01 PASSED !\n";
