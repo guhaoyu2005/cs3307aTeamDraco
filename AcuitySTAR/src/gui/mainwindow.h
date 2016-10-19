@@ -4,6 +4,7 @@
 #include <string>
 #include <QMainWindow>
 #include <vector>
+#include <./testing/test.h>
 
 
 class RecordsManager;
