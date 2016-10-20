@@ -1,9 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <iostream>
 #include <string>
-#include <QMainWindow>
+#include <stdio.h>
 #include <vector>
+#include <QApplication>
+#include <QTreeView>
+#include <QMainWindow>
 #include <./testing/test.h>
 
 

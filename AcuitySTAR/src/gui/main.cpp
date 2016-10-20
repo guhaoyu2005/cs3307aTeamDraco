@@ -1,10 +1,4 @@
-#include <iostream>
-#include <stdio.h>
-#include <QApplication>
-#include <QTreeView>
-
 #include "gui/mainwindow.h"
-#include "database/TestCSVReader.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {

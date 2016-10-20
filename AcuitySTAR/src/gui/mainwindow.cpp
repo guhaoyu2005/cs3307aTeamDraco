@@ -1178,6 +1178,13 @@ void MainWindow::on_categoryTab_currentChanged() {
     }
 }
 
+/**
+ * @brief MainWindow::on_teachTreeView_clicked
+ * @class MainWindow
+ * @param index The Index of the Tree Clicked on
+ * @details
+ *  The
+ */
 void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
     QString clickedName = index.data(Qt::DisplayRole).toString();
     if (clickedName==teachClickedName || index.column()!=0) { return;}
@@ -1556,5 +1563,7 @@ void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
 void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
 
+//Adding QTestClasses as Friends
+//friend Rectangle duplicate (const Rectangle&);
 
 

@@ -1,9 +1,8 @@
-#include "./test.h"
+#include "./test_1.1.h"
 using namespace std;
-
 void QTTestCSVReader::initTestCase()
 {
-    qDebug("called before everything else");
+     qDebug("called before everything else");
 }
 
 void QTTestCSVReader::readGrants()
@@ -61,25 +60,5 @@ void QTTestCSVReader::dataTeaching(){
 
  void QTTestCSVReader::cleanupTestCase()
  {
-    qDebug("called after myFirstTest and mySecondTest");
+    qDebug("TC_1.1 Test CSV Finished");
  }
-
- void QTTestMainWindow::initTestCase()
- {
-     qDebug("called before everything else");
- }
-
- void QTTestMainWindow::teachInvalidLoad()
- {
-     CSVReader reader("../Project Information/Sample Data/Presentations_sample.csv");
-     vector<string> header = reader.getHeaders();
-     vector< vector<string> > all_data = reader.getData();
-     std::string searchstring = "Program";
-     QVERIFY(std::find(header.begin(), header.end(), searchstring) == header.end());
- }
-
- void QTTestMainWindow::cleanupTestCase()
- {
-    qDebug("called after myFirstTest and mySecondTest");
- }
-
