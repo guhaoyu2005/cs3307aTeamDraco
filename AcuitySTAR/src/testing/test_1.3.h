@@ -23,7 +23,17 @@ class QTTestMainWindow: public QObject
     Q_OBJECT
 private slots:
     /**
-     * @briefteachPDF
+     * @brief initTestCase
+     * @class QTTestMainWindow
+     * @author Michael Park
+     * @date 2016/10/19
+     * @details
+     * Telling that this test case is initialized
+     */
+    void initTestCase();
+
+    /**
+     * @brief teachInvalidLoad
      * @class QTTestMainWindow
      * @author Michael Park
      * @date 2016/10/19
@@ -33,7 +43,7 @@ private slots:
     void teachInvalidLoad();
 
     /**
-     * @briefteachPDF
+     * @brief publicationInvalidLoad
      * @class QTTestMainWindow
      * @author Michael Park
      * @date 2016/10/19
@@ -43,7 +53,7 @@ private slots:
     void publicationInvalidLoad();
 
     /**
-     * @briefteachPDF
+     * @brief presentationInvalidLoad
      * @class QTTestMainWindow
      * @author Michael Park
      * @date 2016/10/19
@@ -53,7 +63,7 @@ private slots:
     void presentationInvalidLoad();
 
     /**
-     * @briefteachPDF
+     * @brief fundInvalidLoad
      * @class QTTestMainWindow
      * @author Michael Park
      * @date 2016/10/19
@@ -61,6 +71,16 @@ private slots:
      * Test case for handling invalid load on fund/grant
      */
     void fundInvalidLoad();
+
+    /**
+     * @brief endTestCase
+     * @class QTTestMainWindow
+     * @author Michael Park
+     * @date 2016/10/19
+     * @details
+     * Function to tell this test case is finished
+     */
+    void endTestCase();
 };
 
 #endif // TEST_1_3_H

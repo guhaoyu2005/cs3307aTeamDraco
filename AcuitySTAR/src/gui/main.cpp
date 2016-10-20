@@ -7,19 +7,13 @@ int main(int argc, char *argv[]) {
     if (test) {
         //Initialize Test Classes
         QTTestCSVReader *test_csv = new QTTestCSVReader();
-<<<<<<< HEAD
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
-
-        //Run Tests
-        QTest::qExec(test_csv);
-        QTest::qExec(test_MainWindow);
-=======
         QTTestTreeViewClick *test_tree = new QTTestTreeViewClick();
 
         //Run Tests
         QTest::qExec(test_csv);
         QTest::qExec(test_tree);
->>>>>>> 693eac1c31dffea903d71ddd7c09308746e9e5b6
+        QTest::qExec(test_MainWindow);
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;

@@ -2,12 +2,7 @@
 using namespace std;
 void QTTestCSVReader::initTestCase()
 {
-     qDebug("called before everything else");
-}
-
-void QTTestCSVReader::initTestCase()
-{
-   qDebug("TC_1.1 Test CSV Starting");
+    qDebug("TC_1.1 Test CSV Initialized");
 }
 
 void QTTestCSVReader::readGrants()
