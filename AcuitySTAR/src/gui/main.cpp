@@ -6,12 +6,12 @@ int main(int argc, char *argv[]) {
 
     if (test) {
         //Initialize Test Classes
-        TestQString *test_string = new TestQString();
         QTTestCSVReader *test_csv = new QTTestCSVReader();
+        QTTestTreeViewClick *test_tree = new QTTestTreeViewClick();
 
         //Run Tests
-        QTest::qExec(test_string);
         QTest::qExec(test_csv);
+        QTest::qExec(test_tree);
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;
