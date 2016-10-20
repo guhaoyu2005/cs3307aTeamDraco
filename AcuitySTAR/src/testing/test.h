@@ -12,7 +12,22 @@
 
 //Include Tests
 #include "test_1.1.h"
+<<<<<<< HEAD
 #include "test_1.3.h"
+=======
+#include "test_1.2.h"
+
+/**
+ * @brief The TestQString class
+ * An Example of Testing the QT String Class
+ */
+class TestQString:public QObject
+{
+    Q_OBJECT
+private slots:
+    void toUpper();
+};
+>>>>>>> 693eac1c31dffea903d71ddd7c09308746e9e5b6
 
 /**
  * @brief The MyFirstTest class

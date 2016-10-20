@@ -34,7 +34,11 @@ HEADERS += \
     gui/qcustomplot.h \
     testing/test.h \
     testing/test_1.1.h \
+<<<<<<< HEAD
     testing/test_1.3.h
+=======
+    testing/test_1.2.h
+>>>>>>> 693eac1c31dffea903d71ddd7c09308746e9e5b6
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -55,7 +59,11 @@ SOURCES += \
     gui/qcustomplot.cpp \
     testing/test.cpp \
     testing/tc_1.1.cpp \
+<<<<<<< HEAD
     testing/tc_1.3.cpp
+=======
+    testing/test_1.2.cpp
+>>>>>>> 693eac1c31dffea903d71ddd7c09308746e9e5b6
 
 FORMS += \
     gui/customsort.ui \

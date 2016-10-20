@@ -1,14 +1,7 @@
 #include "./test_1.1.h"
 using namespace std;
 void QTTestCSVReader::initTestCase()
-{
-     qDebug("called before everything else");
-}
 
-void QTTestCSVReader::initTestCase()
-{
-   qDebug("TC_1.1 Test CSV Starting");
-}
 
 void QTTestCSVReader::readGrants()
 {
