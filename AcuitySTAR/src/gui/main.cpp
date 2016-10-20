@@ -8,16 +8,16 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    int test = 1;   /* test off */
+    int test = 1;   /* test on = 1 off = 0 */
 
     if (test) {
         //Initialize Test Classes
-        TestQString *test_string = new TestQString();
         QTTestCSVReader *test_csv = new QTTestCSVReader();
+        QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
 
         //Run Tests
-        QTest::qExec(test_string);
         QTest::qExec(test_csv);
+        QTest::qExec(test_MainWindow);
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;

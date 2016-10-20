@@ -6,20 +6,56 @@
 #include <QObject>
 #include <QDebug>
 #include <QtTest/QtTest>
-
-/**
- * @brief The TestQString class
- * An Example of Testing the QT String Class
- */
-class TestQString:public QObject
-{
-    Q_OBJECT
-private slots:
-    void toUpper();
-};
+#include <ui_mainwindow.h>
 
 //Include for CSV Reader Testing
 #include "./database/CSVReader.h"
+
+//Include for mainWindow Testing
+#include "./gui/mainwindow.h"
+
+/**
+ * @brief The QTTestMainWindow class
+ * @class QTTestCSVReader
+ * @author Michael Park
+ * @date 2016/10/19
+ * @details
+ * QT Test Class for mainwindow class
+ */
+class QTTestMainWindow: public QObject
+{
+    Q_OBJECT
+private slots:
+    /**
+     * @brief initTestCase
+     * @class QTTestMainWindow
+     * @author Michael Park
+     * @date 2016/10/19
+     * @details
+     * Initialize the Test Case
+     */
+    void initTestCase();
+
+    /**
+     * @briefteachPDF
+     * @class QTTestMainWindow
+     * @author Michael Park
+     * @date 2016/10/19
+     * @details
+     * Test case for handling invalid load on teach
+     */
+    void teachInvalidLoad();
+
+    /**
+     * @brief cleanupTestCase
+     * @class QTTestMainWindow
+     * @author Michael Park
+     * @date 2016/10/19
+     * @details
+     * Cleanup Tests
+     */
+    void cleanupTestCase();
+};
 
 /**
  * @brief The QTTestCSVReader class
