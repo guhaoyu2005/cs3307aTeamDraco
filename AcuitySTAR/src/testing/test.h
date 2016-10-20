@@ -14,6 +14,7 @@
 #include "test_1.1.h"
 #include "test_1.2.h"
 #include "test_1.3.h"
+#include "test_1.4.h"
 
 /**
  * @brief The TestQString class

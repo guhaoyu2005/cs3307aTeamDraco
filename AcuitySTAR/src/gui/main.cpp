@@ -3,17 +3,18 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     int test = 1;   /* test on = 1 off = 0 */
-
     if (test) {
         //Initialize Test Classes
         QTTestCSVReader *test_csv = new QTTestCSVReader();
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
         QTTestTreeViewClick *test_tree = new QTTestTreeViewClick();
 
+
         //Run Tests
         QTest::qExec(test_csv);
         QTest::qExec(test_tree);
         QTest::qExec(test_MainWindow);
+
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;
@@ -45,6 +46,12 @@ int main(int argc, char *argv[]) {
     }
 
     QApplication app(argc, argv);
+
+    //UI testing must occurs after QApplication initialized.
+    if (test) {
+        QTTestNewSortOrder *test_SortOrder = new QTTestNewSortOrder();
+        QTest::qExec(test_SortOrder);
+    }
     MainWindow w;
     w.show();
 

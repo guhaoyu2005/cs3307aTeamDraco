@@ -1,5 +1,5 @@
-#ifndef TC_1_4_H
-#define TC_1_4_H
+#ifndef TEST_1_4_H
+#define TEST_1_4_H
 
 #include <string>
 #include <vector>
@@ -7,11 +7,14 @@
 #include <QDebug>
 #include <QtTest/QtTest>
 
-class QTTestXXX : public QObject  {
+class QTTestNewSortOrder : public QObject  {
     Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void endTestCase();
+
+    void createNewSortOrder();
 };
 
-#endif // TC_1_4_H
+#endif // TEST_1_4_H
