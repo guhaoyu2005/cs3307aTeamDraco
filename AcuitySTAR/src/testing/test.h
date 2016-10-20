@@ -7,9 +7,13 @@
 #include <QDebug>
 #include <QtTest/QtTest>
 
+//Include for CSV Reader Testing
+#include "./database/CSVReader.h"
+
 //Include Tests
 #include "test_1.1.h"
 #include "test_1.2.h"
+#include "test_1.3.h"
 
 /**
  * @brief The TestQString class
@@ -21,6 +25,7 @@ class TestQString:public QObject
 private slots:
     void toUpper();
 };
+
 
 /**
  * @brief The MyFirstTest class
