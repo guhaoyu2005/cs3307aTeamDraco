@@ -1,4 +1,4 @@
-#include "test_1.4.h"
+#include "test_3.1.h"
 
 #include "ui_mainwindow.h"
 #include "./gui/mainwindow.h"
@@ -7,7 +7,7 @@ Ui::MainWindow* ui;
 MainWindow* uiCtl;
 
 void QTTestNewSortOrder::initTestCase() {
-    qDebug("TEST_1.4 New Sort Order Test Initialized.");
+    qDebug("TEST_3.1 New Sort Order Test Initialized.");
     ui = new Ui::MainWindow();
     uiCtl = new MainWindow();
     ui->setupUi(uiCtl);
@@ -40,11 +40,11 @@ void QTTestNewSortOrder::createNewSortOrder() {
 }
 
 void QTTestNewSortOrder::cleanupTestCase() {
-    qDebug("TEST_1.4 New Sort Order Test Cleaning...");
+    qDebug("TEST_3.1 New Sort Order Test Cleaning...");
     delete ui;
     delete uiCtl;
 }
 
 void QTTestNewSortOrder::endTestCase() {
-    qDebug("TEST_1.4 New Sort Order Test Finished.");
+    qDebug("TEST_3.1 New Sort Order Test Finished.");
 }

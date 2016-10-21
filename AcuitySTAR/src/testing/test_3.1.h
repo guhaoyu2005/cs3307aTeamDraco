@@ -1,5 +1,5 @@
-#ifndef TEST_1_4_H
-#define TEST_1_4_H
+#ifndef TEST_3_1_H
+#define TEST_3_1_H
 
 #include <string>
 #include <vector>
@@ -58,4 +58,4 @@ private slots:
     void createNewSortOrder();
 };
 
-#endif // TEST_1_4_H
+#endif // TEST_3_1_H
