@@ -9,7 +9,6 @@ int main(int argc, char *argv[]) {
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
         QTTestTreeModel *test_tree = new QTTestTreeModel();
 
-
         //Run Tests
         QTest::qExec(test_csv);
         QTest::qExec(test_tree);
