@@ -7,15 +7,19 @@
 #include <QDebug>
 #include <QtTest/QtTest>
 
+#include "database/RecordsManager.h"
+#include "datamodel/TreeItem.h"
+#include "datamodel/TreeModel.h"
+
 /**
- * @brief TC_1.2 - The QTTestTreeViewClick class
+ * @brief TC_2.1 - The QTTestTreeViewClick class
  * @class QTTestTreeViewClick
  * @author James Wake
  * @date 2016/10/19
  * @details
- * TC_1.1 - QT Test Class for Tree View Clicks
+ * TC_2.1 - QT Test Class for Tree View Clicks
  */
-class QTTestTreeViewClick: public QObject
+class QTTestTreeModel: public QObject
 {
     Q_OBJECT
 private slots:

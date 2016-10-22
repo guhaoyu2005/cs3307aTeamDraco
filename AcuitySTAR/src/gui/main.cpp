@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
         //Initialize Test Classes
         QTTestCSVReader *test_csv = new QTTestCSVReader();
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
-        QTTestTreeViewClick *test_tree = new QTTestTreeViewClick();
+        QTTestTreeModel *test_tree = new QTTestTreeModel();
 
 
         //Run Tests
