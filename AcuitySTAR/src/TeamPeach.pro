@@ -6,7 +6,8 @@
 
 QT                 += core gui
 QT                 += testlib
-CONFIG          += c++11
+CONFIG             += c++11
+CONFIG             += console
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
