@@ -44,8 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->showMaximized();
 
     // set up the logo
-    QPixmap logo(":/logo.png");
-    ui->logo_label->setPixmap(logo);
+   // QPixmap logo(":/logo.png");
+    //ui->logo_label->setPixmap(logo);
 
     // set up application icon
     QIcon icon(":/icon32.ico");

@@ -1,4 +1,5 @@
 #include "gui/mainwindow.h"
+#include "homepage.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
         QTTestNewSortOrder *test_SortOrder = new QTTestNewSortOrder();
         QTest::qExec(test_SortOrder);
     }
-    MainWindow w;
+    HomePage w;
     w.show();
 
     return app.exec();

@@ -36,7 +36,8 @@ HEADERS += \
     testing/test_1.1.h \
     testing/test_1.3.h \
     testing/test_3.1.h \
-    testing/test_2.1.h
+    testing/test_2.1.h \
+    gui/homepage.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -59,12 +60,14 @@ SOURCES += \
     testing/tc_1.1.cpp \
     testing/tc_1.3.cpp \
     testing/test_3.1.cpp \
-    testing/test_2.1.cpp
+    testing/test_2.1.cpp \
+    gui/homepage.cpp
 
 FORMS += \
     gui/customsort.ui \
     gui/mainwindow.ui \
-    gui/ErrorEditDialog.ui
+    gui/ErrorEditDialog.ui \
+    gui/homepage.ui
 
 RESOURCES += \
     images.qrc
