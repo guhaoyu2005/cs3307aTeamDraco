@@ -1431,10 +1431,28 @@ void MainWindow::on_teachExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->teachChartFrame->setFixedHeight(515);
+        ui->teachChartFrame->setFixedWidth(762);
         ui->teachChartFrame->render(&painter);
+
+        //setting back the size
+        ui->teachChartFrame->setFixedHeight(preSize.height());
+         ui->teachChartFrame->setFixedHeight(preSize.width());
         /* Another option for bar chart since it is QCustom plot
         if (ui->teach_bar_button->isChecked()) {
             ui->teachBarChart->savePdf(fileName);
@@ -1451,10 +1469,28 @@ void MainWindow::on_fundExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->fundChartFrame->setFixedHeight(515);
+        ui->fundChartFrame->setFixedWidth(762);
         ui->fundChartFrame->render(&painter);
+
+        //setting back the size
+        ui->fundChartFrame->setFixedHeight(preSize.height());
+         ui->fundChartFrame->setFixedHeight(preSize.width());
     }
 }
 
@@ -1466,10 +1502,28 @@ void MainWindow::on_presExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->presChartFrame->setFixedHeight(515);
+        ui->presChartFrame->setFixedWidth(762);
         ui->presChartFrame->render(&painter);
+
+        //setting back the size
+        ui->presChartFrame->setFixedHeight(preSize.height());
+         ui->presChartFrame->setFixedHeight(preSize.width());
     }
 }
 
@@ -1481,10 +1535,28 @@ void MainWindow::on_pubExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->pubChartFrame->setFixedHeight(515);
+        ui->pubChartFrame->setFixedWidth(762);
         ui->pubChartFrame->render(&painter);
+
+        //setting back the size
+        ui->pubChartFrame->setFixedHeight(preSize.height());
+         ui->pubChartFrame->setFixedHeight(preSize.width());
     }
 }
 
