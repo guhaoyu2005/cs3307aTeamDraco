@@ -1,9 +1,0 @@
-#include "tc_1.4.h"
-
-void QTTestModdedDataHandling::initTestCase() {
-    
-}
-
-void QTTestModdedDataHandling::cleanupTestCase() {
-    
-}

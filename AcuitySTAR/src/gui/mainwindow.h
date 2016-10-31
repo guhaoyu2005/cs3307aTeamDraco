@@ -21,6 +21,7 @@ class QTreeView;
 class QCustomPlot;
 class QPrinter;
 class QPainter;
+class QTTestLoadFile;
 
 namespace Ui {
     class MainWindow;
@@ -158,6 +159,7 @@ private:
 
     bool serialize_loaded_paths(QString save_path);
     bool load_serialized_paths(QString save_path);
+    friend class QTTestLoadFile;
 };
 
 #endif // MAINWINDOW_H

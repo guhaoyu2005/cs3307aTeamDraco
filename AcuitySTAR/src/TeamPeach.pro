@@ -15,7 +15,8 @@ TARGET = TeamPeach
 TEMPLATE = app
 
 DISTFILES += \
-    TeamPeach.pro.user
+    TeamPeach.pro.user \
+    testing/tc_4.1
 
 HEADERS += \
     gui/CustomSort.h \
@@ -37,7 +38,8 @@ HEADERS += \
     testing/test_1.1.h \
     testing/test_1.3.h \
     testing/test_3.1.h \
-    testing/test_2.1.h
+    testing/test_2.1.h \
+    testing/test_4.1.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -60,7 +62,8 @@ SOURCES += \
     testing/tc_1.1.cpp \
     testing/tc_1.3.cpp \
     testing/test_3.1.cpp \
-    testing/test_2.1.cpp
+    testing/test_2.1.cpp \
+    testing/tc_4.1.cpp
 
 FORMS += \
     gui/customsort.ui \
