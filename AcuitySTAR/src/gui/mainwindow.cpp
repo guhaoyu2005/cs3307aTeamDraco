@@ -1182,8 +1182,8 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
 
 /**
  * @brief MainWindow::load_serialized_paths
- * @param path
- * @return
+ * @param path The Path to load the serialized paths from
+ * @return If Successful
  */
 bool MainWindow::load_serialized_paths(QString path) {
 
@@ -1244,7 +1244,7 @@ bool MainWindow::load_serialized_paths(QString path) {
             } else {
                 qDebug() << "Not Loading Previous Files Clearing Data file";
                 //Do Nothing Clear Previous Paths Data
-                //serialize_loaded_paths(PEVIOUS_FILES_SAVE);
+                serialize_loaded_paths(PREVIOUS_FILES_SAVE);
             }
         }
 
@@ -1258,8 +1258,8 @@ bool MainWindow::load_serialized_paths(QString path) {
 
 /**
  * @brief MainWindow::serialize_loaded_paths
- * @param path
- * @return
+ * @param path The path where the paths will be serialized
+ * @return If Successful
  */
 bool MainWindow::serialize_loaded_paths(QString path) {
     //PREVIOUS_FILES_SAVE
