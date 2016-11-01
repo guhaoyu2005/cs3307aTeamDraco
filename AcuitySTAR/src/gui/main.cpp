@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 
-    MainWindow w;
+    HomePage w;
     w.show();
 
     //UI testing must occurs after QApplication initialized.
