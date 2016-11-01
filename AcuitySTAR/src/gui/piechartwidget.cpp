@@ -1,5 +1,6 @@
 #include "gui/piechartwidget.h"
 #include <QPainter>
+#include <QDebug>
 #include <math.h>
 #define PI 3.14159265
 
@@ -53,11 +54,27 @@ void PieChartWidget::paintEvent(QPaintEvent *) {
         endAng=startAng + angle;
         painter.setBrush(qvColor[i]);
         painter.drawPie(size,startAng*16,angle*16);
-        xOffset = (size.width()/2)*cos((startAng+(angle/2))*PI/180);
-        yOffset = (size.width()/2)*sin((startAng+(angle/2))*PI/180);
+
+        //radius = circumference/2*PI;
+       // central =
+       // int arclength = 2*PI*radius(central/360);
+        float centerx = centerPie.x();
+        float centery = centerPie.y();
+        double radiusVectorx = centerx- xOffset;
+        double radiusVectory = centery- yOffset;
+        double radiuslength = sqrt(radiusVectorx*radiusVectorx + radiusVectory*radiusVectory);
+       // double arclength = radiuslength *angle;
+        double arclength = (PI*(radiuslength)*angle)/ 180;
+        qDebug() << centerx << " " << centery << " " << radiusVectorx << " " << radiusVectory << " "  << radiuslength << " " << angle << " " << arclength;
+
+       // int arclength
+        xOffset = (size.width()/4)*cos((startAng+(angle/2))*PI/180);
+        yOffset = (size.width()/4)*sin((startAng+(angle/2))*PI/180);
+       if(arclength >= 45){
         labelPoint.setX(centerPie.x()+xOffset);
         labelPoint.setY(centerPie.y()-yOffset);
         painter.setPen(penBlack);
+
         if (vRecordList[i].second<1000){
             painter.drawText(labelPoint.toPoint(), QString::number(vRecordList[i].second) );
         }else if (vRecordList[i].second>1000 && vRecordList[i].second<100000)
@@ -67,9 +84,10 @@ void PieChartWidget::paintEvent(QPaintEvent *) {
         {
             painter.drawText(labelPoint.toPoint(), QString::number(vRecordList[i].second/1000000) + "M" );
         }
-
+}
 
         startAng=endAng;
     }
+
 
 }
