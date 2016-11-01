@@ -28,6 +28,8 @@
 #define PRESORDER_SAVE  "pressortorder.dat"
 #define PUBORDER_SAVE   "pubsortorder.dat"
 #define TEACHORDER_SAVE "teachsortorder.dat"
+//Persistence - Team Draco 2016
+#define PREVIOUS_FILES_SAVE "previousfiles.dat"
 
 std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date"};
 std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
@@ -86,6 +88,9 @@ MainWindow::MainWindow(QWidget *parent) :
     printer = new QPrinter();
 
     dateChanged = {false, false, false, false};
+
+    //Load Serialized States - Team Draco 2016
+    this->load_serialized_paths(PREVIOUS_FILES_SAVE);
 
 }
 
@@ -235,7 +240,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, TEACH_MANFIELDS)) {
+                    if(handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             teachdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
@@ -292,7 +297,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, PUBS_MANFIELDS)) {
+                    if(handle_field_errors(f_errs, header, PUBS_MANFIELDS, filePath, PUBLICATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             pubdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
@@ -350,7 +355,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, PRES_MANFIELDS)) {
+                    if(handle_field_errors(f_errs, header, PRES_MANFIELDS, filePath, PRESENTATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             presdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
@@ -414,7 +419,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                     }
                 }
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, GRANTS_MANFIELDS)) {
+                    if(handle_field_errors(f_errs, header, GRANTS_MANFIELDS, filePath, FUNDING)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             funddb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
@@ -507,7 +512,9 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
  */
 bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err,
                                      std::vector<std::string>& headers,
-                                     std::vector<std::string>& mandatory) {
+                                     std::vector<std::string>& mandatory,
+                                     QString filePath,
+                                     TABS tab) {
     //Since CSVReader alldata contains completely empty records
     //remove them first.
     std::vector<std::vector<std::string>*>::iterator it;
@@ -528,7 +535,23 @@ bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err
         return false;
     }
     QMessageBox prompt;
-    QString mainText = "File contains ";
+    QString mainText = "";
+    switch(tab){
+    case TEACH:
+        mainText.append("Teaching File: ");
+        break;
+    case PUBLICATIONS:
+        mainText.append("Publications File: ");
+        break;
+    case PRESENTATIONS:
+        mainText.append("Presentations File: ");
+        break;
+    case FUNDING:
+        mainText.append("Funding File: ");
+        break;
+    }
+    mainText.append(filePath);
+    mainText.append(" contains ");
     mainText.append(QString::number(err.size()));
     mainText.append(" records with missing mandatory fields.");
     prompt.setText(mainText);
@@ -982,6 +1005,9 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         makeTree(TEACH);
         ui->teach_file_label->setText(teachPath);
 
+        // Serialize loaded Model - Team Draco 2016
+        serialize_loaded_paths(PREVIOUS_FILES_SAVE);
+
         return true;
     } else {
         if (!multi_file) {
@@ -1032,6 +1058,9 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         pubPath = path;
         makeTree(PUBLICATIONS);
         ui->pub_file_label->setText(pubPath);
+
+        // Serialize loaded Model - Team Draco 2016
+        serialize_loaded_paths(PREVIOUS_FILES_SAVE);
 
         return true;
     } else {
@@ -1084,6 +1113,9 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         makeTree(PRESENTATIONS);
         ui->pres_file_label->setText(presPath);
 
+        // Serialize loaded Model - Team Draco 2016
+        serialize_loaded_paths(PREVIOUS_FILES_SAVE);
+
         return true;
     } else {
         if (!multi_file) {
@@ -1135,6 +1167,9 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         makeTree(FUNDING);
         ui->fund_file_label->setText(fundPath);
 
+        // Serialize loaded Model - Team Draco 2016
+        serialize_loaded_paths(PREVIOUS_FILES_SAVE);
+
         return true;
     } else {
         if (!multi_file) {
@@ -1143,6 +1178,115 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         }
     }
     return false;
+}
+
+/**
+ * @brief MainWindow::load_serialized_paths
+ * @param path
+ * @return
+ */
+bool MainWindow::load_serialized_paths(QString path) {
+
+    // open the file for reading
+    QFile file(path);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "no previous files data file loaded";
+        return false;
+    }
+
+    // read the data serialized from the file
+    QDataStream in(&file);
+
+    // extract sort fields
+    QStringList paths;
+    in >> paths;
+
+    // close the file, we're done
+    file.close();
+
+    //Load the Paths in and load them respectively based on tab
+    //Known index positions
+    if(paths.size() == 4) {
+        qDebug() << "Read: " << paths[0] << " " << paths[1] << " " << paths[2] << " " << paths[3];
+
+
+        bool reload = false;
+        if(paths[0].size() > 0 || paths[1].size() > 0 || paths[2].size() > 0 || paths[3].size() > 0){
+            reload = true;
+        }
+
+        if(reload){
+            //Move Following Functionality Later
+            //Ask user if they want to reload previous files
+            QMessageBox::StandardButton userReply;
+            userReply = QMessageBox::question(this, "Test", "Load Previous Files?", QMessageBox::Yes|QMessageBox::No);
+            if (userReply == QMessageBox::Yes) {
+                qDebug() << "Loading Previous Files";
+
+                if(paths[0].size() > 0){
+                    load_teach(paths[0]);
+                }
+
+                if(paths[1].size() > 0){
+                    load_pub(paths[1]);
+                }
+
+                if(paths[2].size() > 0){
+                    load_pres(paths[2]);
+                }
+
+                if(paths[3].size() > 0){
+                    load_fund(paths[3]);
+                }
+
+
+            } else {
+                qDebug() << "Not Loading Previous Files Clearing Data file";
+                //Do Nothing Clear Previous Paths Data
+                //serialize_loaded_paths(PEVIOUS_FILES_SAVE);
+            }
+        }
+
+    } else {
+        qDebug() << "Malformed Saved Paths File";
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief MainWindow::serialize_loaded_paths
+ * @param path
+ * @return
+ */
+bool MainWindow::serialize_loaded_paths(QString path) {
+    //PREVIOUS_FILES_SAVE
+    qDebug() << "Saving to: " << path;
+    qDebug() << this->teachPath << " " << this->pubPath << " " << this->presPath << " " << this->fundPath;
+
+    QStringList paths;
+    //QVector<String> paths;
+    paths.append(this->teachPath);
+    paths.append(this->pubPath);
+    paths.append(this->presPath);
+    paths.append(this->fundPath);
+
+    // open the file for writing
+    QFile file(path);
+    file.open(QIODevice::WriteOnly);
+
+    // we will serialize the data into the file
+    QDataStream out(&file);
+
+    // serialize the sort fields
+    out << paths;
+
+    // close the file, we're done
+    file.close();
+
+    return true;
 }
 
 void MainWindow::on_FromDate_dateChanged(const QDate &date) {

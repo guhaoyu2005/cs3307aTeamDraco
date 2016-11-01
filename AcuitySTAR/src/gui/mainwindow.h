@@ -21,6 +21,7 @@ class QTreeView;
 class QCustomPlot;
 class QPrinter;
 class QPainter;
+class QTTestLoadFile;
 
 namespace Ui {
     class MainWindow;
@@ -148,11 +149,17 @@ private:
 
     bool handle_field_errors(std::vector<std::vector<std::string>*>& errors,
                              std::vector<std::string>& headers,
-                             std::vector<std::string>& mandatory);
+                             std::vector<std::string>& mandatory,
+                             QString filePath,
+                             TABS tab);
     bool load_fund(QString path, bool multi_file = false);
     bool load_pub(QString path, bool multi_file = false);
     bool load_teach(QString path, bool multi_file = false);
     bool load_pres(QString path, bool multi_file = false);
+
+    bool serialize_loaded_paths(QString save_path);
+    bool load_serialized_paths(QString save_path);
+    friend class QTTestLoadFile;
 };
 
 #endif // MAINWINDOW_H
