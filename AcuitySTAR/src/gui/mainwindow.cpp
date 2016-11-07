@@ -154,6 +154,103 @@ QString MainWindow::load_file() {
     }
 }
 
+bool MainWindow::checkTargetTabHasFileLoaded(TABS tabId) {
+    switch (tabId) {
+    case TEACH: {
+        return teachdb?true:false;
+    }
+    case PRESENTATIONS: {
+        return presdb?true:false;
+    }
+    case PUBLICATIONS: {
+        return pubdb?true:false;
+    }
+    case FUNDING: {
+        return funddb?true:false;
+    }
+    }
+}
+
+void MainWindow::loadFileAndSwitchToProperTab() {
+    QString filePath = load_file();
+    if (!filePath.isEmpty()) {
+        CSVReader reader;
+        reader.loadCSV(filePath.toStdString());
+        std::string errMsg;
+        if (reader.getFileType(errMsg) == CSVReader::CSVFileTypeBadFile) {
+            QMessageBox::StandardButton badFileMsgbox;
+            badFileMsgbox = QMessageBox::question(this, "Bad file", "Failed to load file or file format invalid. Retry?", QMessageBox::Yes|QMessageBox::No);
+            if (badFileMsgbox == QMessageBox::Yes) {
+                loadFileAndSwitchToProperTab();
+                return;
+            }
+            else {
+                //do nothing and return
+                return;
+            }
+        }
+        else {
+            switch (reader.getFileType(errMsg)) {
+                case CSVReader::CSVFileTypeTeaching: {
+                    if (checkTargetTabHasFileLoaded(TEACH)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    //continue
+                    load_teach(filePath);
+                    ui->categoryTab->setCurrentIndex(0);
+                    break;
+                }
+                case CSVReader::CSVFileTypePublications: {
+                    if (checkTargetTabHasFileLoaded(PUBLICATIONS)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_pub(filePath);
+                    ui->categoryTab->setCurrentIndex(1);
+                    break;
+                }
+                case CSVReader::CSVFileTypePresentations: {
+                    if (checkTargetTabHasFileLoaded(PRESENTATIONS)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_pres(filePath);
+                    ui->categoryTab->setCurrentIndex(2);
+                    break;
+                }
+                case CSVReader::CSVFileTypeGrants: {
+                    if (checkTargetTabHasFileLoaded(FUNDING)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_fund(filePath);
+                    ui->categoryTab->setCurrentIndex(3);
+                    break;
+                }
+            }
+        }
+    }
+    else {
+        //do nothing for now if didn't select any
+    }
+}
 void MainWindow::refresh(int tabIndex) {
     // if we've loaded in a file, update that data
     switch (tabIndex) {
@@ -965,11 +1062,15 @@ void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->se
 void MainWindow::on_fund_pie_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(0);}
 
 void MainWindow::on_teach_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_teach(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
+
+
 
 bool MainWindow::load_teach(QString path, bool multi_file) {
     if (!checkFile(TEACH, path)) {
@@ -1019,10 +1120,12 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
 }
 
 void MainWindow::on_pub_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_pub(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_pub(QString path, bool multi_file) {
@@ -1073,10 +1176,12 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
 }
 
 void MainWindow::on_pres_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_pres(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_pres(QString path, bool multi_file) {
@@ -1127,10 +1232,11 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
 }
 
 void MainWindow::on_fund_load_file_clicked() {
-    QString path = load_file();
+    /*QString path = load_file();
     if (!path.isEmpty()) {
         load_fund(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_fund(QString path, bool multi_file) {

@@ -88,3 +88,30 @@ CSVReader::CSVReader() {
 CSVReader::CSVReader(std::string file) {
     loadCSV(file);
 }
+
+CSVReader::CSVFileType CSVReader::getFileType(std::string& errMsg) {
+    if (headers.size()==0) {
+        errMsg = "no valid file loaded.";
+        return CSVReader::CSVFileTypeBadFile;
+    }
+    else {
+        std::string idStrTeaching = "Program";
+        std::string idStrPublication = "Publication Status";
+        std::string idStrPresentation = "Activity Type";
+        std::string idStrFunding = "Funding Type";
+        if (std::find(headers.begin(), headers.end(), idStrTeaching) != headers.end()) {
+            return CSVReader::CSVFileTypeTeaching;
+        }
+        else if (std::find(headers.begin(), headers.end(), idStrPublication) != headers.end()) {
+            return CSVReader::CSVFileTypePublications;
+        }
+        else if (std::find(headers.begin(), headers.end(), idStrPresentation) != headers.end()) {
+            return CSVReader::CSVFileTypePresentations;
+        }
+        else if (std::find(headers.begin(), headers.end(), idStrFunding) != headers.end()) {
+            return CSVReader::CSVFileTypeGrants;
+        }
+        errMsg = "no valid file loaded.";
+        return CSVReader::CSVFileTypeBadFile;
+    }
+}
