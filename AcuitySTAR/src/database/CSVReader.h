@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 
 class CSVReader {
     std::vector<std::string> headers;
