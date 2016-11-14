@@ -870,8 +870,6 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
         //getting x labels
         xlabels << QString::fromStdString(boxPlotList[i].first);
         // setting the data with values
-        statistical->setData(i,boxPlotList[i].second,boxPlotList[i].second,
-                             boxPlotList[i].second,boxPlotList[i].second,boxPlotList[i].second);
         if (boxPlotList[i].second>1000000){
             scaledCount = boxPlotList[i].second/1000000;
         } else if (boxPlotList[i].second>1000){
@@ -895,23 +893,6 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
     }else{
         boxPlot->yAxis->setLabel("Total");
     }
-
-
-    // specify data:
-    //statistical->setData(1, 1.1, 1.9, 2.25, 2.7, 4.2);
-    //statistical->setData(2, 0.8, 1.6, 2.2, 3.2, 4.9); // provide some outliers as QVector
-    //statistical->setData(3, 0.2, 0.7, 1.1, 1.6, 2.9);
-/*
-    // prepare manual x axis labels:
-    boxPlot->xAxis->setSubTicks(false);
-    boxPlot->xAxis->setTickLength(0, 4);
-    boxPlot->xAxis->setTickLabelRotation(20);
-    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
-    textTicker->addTick(1, "Sample 1");
-    textTicker->addTick(2, "Sample 2");
-    textTicker->addTick(3, "Control Group");
-    boxPlot->xAxis->setTicker(textTicker);
-*/
 
 
     //setup X Axis
@@ -938,7 +919,7 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
     boxPlot->xAxis->setTickVectorLabels(xlabels);
     //boxPlot->xAxis->scaleRange(1.7, boxPlot->xAxis->range().center());
     boxPlot->yAxis->setRange(0, 7);*/
-    //boxPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    boxPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
 }
 
