@@ -201,7 +201,7 @@ p, li { white-space: pre-wrap; }
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -217,7 +217,7 @@ p, li { white-space: pre-wrap; }
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Stat Box</string>
+              <string>Box Plot</string>
              </property>
             </widget>
            </item>
@@ -656,7 +656,20 @@ p, li { white-space: pre-wrap; }
                 <widget class="QWidget" name="teach_stat_page">
                  <layout class="QGridLayout" name="gridLayout_25">
                   <item row="0" column="0">
-                   <widget class="QCustomPlot" name="teachBoxPlot" native="true"/>
+                   <widget class="QCustomPlot" name="teachBoxPlot" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>350</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
@@ -911,7 +924,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="pub_pie_page">
                  <layout class="QGridLayout" name="gridLayout_18">
@@ -989,6 +1002,18 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                  </layout>
+                </widget>
+                <widget class="QWidget" name="pub_stat_page">
+                 <widget class="QCustomPlot" name="pubBoxPlot" native="true">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>551</width>
+                    <height>861</height>
+                   </rect>
+                  </property>
+                 </widget>
                 </widget>
                 <widget class="QWidget" name="pub_bar_page">
                  <layout class="QGridLayout" name="gridLayout_19">
@@ -1342,6 +1367,16 @@ p, li { white-space: pre-wrap; }
              </property>
             </widget>
            </item>
+           <item row="4" column="11">
+            <widget class="QRadioButton" name="pub_stat_button">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Box Plot</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="tabPres">
@@ -1376,44 +1411,10 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="pres_pie_page">
                  <layout class="QGridLayout" name="gridLayout_11">
-                  <item row="0" column="1">
-                   <widget class="QListWidget" name="presPieList">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="baseSize">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="selectionMode">
-                     <enum>QAbstractItemView::NoSelection</enum>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="0" column="0">
                    <widget class="PieChartWidget" name="presPieChart" native="true">
                     <property name="enabled">
@@ -1453,7 +1454,53 @@ p, li { white-space: pre-wrap; }
                     </layout>
                    </widget>
                   </item>
+                  <item row="0" column="1">
+                   <widget class="QListWidget" name="presPieList">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="baseSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="selectionMode">
+                     <enum>QAbstractItemView::NoSelection</enum>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
+                </widget>
+                <widget class="QWidget" name="pres_stat_page">
+                 <widget class="QCustomPlot" name="presBoxPlot" native="true">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>551</width>
+                    <height>861</height>
+                   </rect>
+                  </property>
+                 </widget>
                 </widget>
                 <widget class="QWidget" name="pres_bar_page">
                  <layout class="QGridLayout" name="gridLayout_8">
@@ -1886,6 +1933,16 @@ p, li { white-space: pre-wrap; }
              </property>
             </widget>
            </item>
+           <item row="4" column="11">
+            <widget class="QRadioButton" name="pres_stat_button">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Box Plot</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="tabFund">
@@ -1926,7 +1983,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="fund_pie_page">
                  <layout class="QGridLayout" name="gridLayout_9">
@@ -2004,6 +2061,18 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                  </layout>
+                </widget>
+                <widget class="QWidget" name="fund_stat_page">
+                 <widget class="QCustomPlot" name="fundBoxPlot" native="true">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>551</width>
+                    <height>861</height>
+                   </rect>
+                  </property>
+                 </widget>
                 </widget>
                 <widget class="QWidget" name="fund_bar_page">
                  <layout class="QGridLayout" name="gridLayout_15">
@@ -2430,6 +2499,16 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="toolButtonStyle">
               <enum>Qt::ToolButtonTextBesideIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="11">
+            <widget class="QRadioButton" name="fund_stat_button">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Box Plot</string>
              </property>
             </widget>
            </item>

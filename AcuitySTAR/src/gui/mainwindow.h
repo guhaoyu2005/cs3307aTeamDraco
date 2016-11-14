@@ -69,12 +69,16 @@ private slots:
 
     void on_teach_pie_button_toggled();
     void on_teach_bar_button_toggled();
+    void on_teach_stat_button_toggled();
     void on_pub_pie_button_toggled();
     void on_pub_bar_button_toggled();
+    void on_pub_stat_button_toggled();
     void on_pres_pie_button_toggled();
     void on_pres_bar_button_toggled();
+    void on_pres_stat_button_toggled();
     void on_fund_pie_button_toggled();
     void on_fund_bar_button_toggled();
+    void on_fund_stat_button_toggled();
 
     void on_teachTreeView_clicked(const QModelIndex &index);
     void on_pubTreeView_clicked(const QModelIndex &index);

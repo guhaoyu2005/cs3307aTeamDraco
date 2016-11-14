@@ -850,36 +850,97 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
 
     yLabels->setData(ticks, count);
 }
-/*
+
 //set up for the Box Plot (added new chart)
 void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::string, double>> boxPlotList){
-    QCPStatisticalBox *statistical = new QCPStatisticalBox()
+    QCPStatisticalBox *statistical = new QCPStatisticalBox(boxPlot->xAxis, boxPlot->yAxis);
     QBrush boxBrush(QColor(60, 60, 255, 100));
     boxBrush.setStyle(Qt::Dense6Pattern); // make it look oldschool
     statistical->setBrush(boxBrush);
 
-    // specify data:
-    statistical->addData(1, 1.1, 1.9, 2.25, 2.7, 4.2);
-    statistical->addData(2, 0.8, 1.6, 2.2, 3.2, 4.9, QVector<double>() << 0.7 << 0.34 << 0.45 << 6.2 << 5.84); // provide some outliers as QVector
-    statistical->addData(3, 0.2, 0.7, 1.1, 1.6, 2.9);
+    //setData(double key, double minimum, double lowerQuartile, double median, double upperQuartile, double maximum)
+    int boxSize = (int) boxPlotList.size();
+    double maxCount = 0;
+    double scaledCount;
+    QVector<double> ticks;
+    QVector<QString> xlabels;
+    QVector<double> count;
+    for (int i = 0; i < boxSize; i++){
+        ticks << (i+1);
+        //getting x labels
+        xlabels << QString::fromStdString(boxPlotList[i].first);
+        // setting the data with values
+        statistical->setData(i,boxPlotList[i].second,boxPlotList[i].second,
+                             boxPlotList[i].second,boxPlotList[i].second,boxPlotList[i].second);
+        if (boxPlotList[i].second>1000000){
+            scaledCount = boxPlotList[i].second/1000000;
+        } else if (boxPlotList[i].second>1000){
+            scaledCount = boxPlotList[i].second/1000;
+        } else{
+            scaledCount = boxPlotList[i].second;
+        }
+        count <<scaledCount;
 
+        if (maxCount < boxPlotList[i].second)
+            maxCount = boxPlotList[i].second;
+    }
+
+    //add label list to x axis labels
+    if(maxCount>1000000){
+        maxCount = maxCount/1000000;
+        boxPlot->yAxis->setLabel("Total (in Millions)");
+    }else if (maxCount>1000){
+        maxCount = maxCount/1000;
+        boxPlot->yAxis->setLabel("Total (in Thousands)");
+    }else{
+        boxPlot->yAxis->setLabel("Total");
+    }
+
+
+    // specify data:
+    //statistical->setData(1, 1.1, 1.9, 2.25, 2.7, 4.2);
+    //statistical->setData(2, 0.8, 1.6, 2.2, 3.2, 4.9); // provide some outliers as QVector
+    //statistical->setData(3, 0.2, 0.7, 1.1, 1.6, 2.9);
+/*
     // prepare manual x axis labels:
-    customPlot->xAxis->setSubTicks(false);
-    customPlot->xAxis->setTickLength(0, 4);
-    customPlot->xAxis->setTickLabelRotation(20);
+    boxPlot->xAxis->setSubTicks(false);
+    boxPlot->xAxis->setTickLength(0, 4);
+    boxPlot->xAxis->setTickLabelRotation(20);
     QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
     textTicker->addTick(1, "Sample 1");
     textTicker->addTick(2, "Sample 2");
     textTicker->addTick(3, "Control Group");
-    customPlot->xAxis->setTicker(textTicker);
+    boxPlot->xAxis->setTicker(textTicker);
+*/
 
+
+    //setup X Axis
+    boxPlot->xAxis->setAutoTicks(false);
+    boxPlot->xAxis->setAutoTickLabels(false);
+    boxPlot->xAxis->setTickVector(ticks);
+    boxPlot->xAxis->setTickVectorLabels(xlabels);
+    boxPlot->xAxis->setTickLabelPadding(1);
+    boxPlot->xAxis->setSubTickCount(0);
+    boxPlot->xAxis->setTickLength(0, 1);
+    boxPlot->xAxis->grid()->setVisible(true);
+    boxPlot->xAxis->setRange(0, boxSize+1);
+
+    // setup Y Axis
+    boxPlot->yAxis->setAutoTicks(true);
+    boxPlot->yAxis->setRange(0,maxCount+(maxCount*.05));
+    boxPlot->yAxis->setAutoTickLabels(true);
+    boxPlot->yAxis->setAutoTickStep(true);
+    boxPlot->yAxis->grid()->setSubGridVisible(true);
+
+    /*
     // prepare axes:
-    customPlot->yAxis->setLabel(QString::fromUtf8("O₂ Absorption [mg]"));
-    customPlot->rescaleAxes();
-    customPlot->xAxis->scaleRange(1.7, customPlot->xAxis->range().center());
-    customPlot->yAxis->setRange(0, 7);
-    customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-}*/
+    boxPlot->rescaleAxes();
+    boxPlot->xAxis->setTickVectorLabels(xlabels);
+    //boxPlot->xAxis->scaleRange(1.7, boxPlot->xAxis->range().center());
+    boxPlot->yAxis->setRange(0, 7);*/
+    //boxPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+}
 
 void MainWindow::on_teach_new_sort_clicked() {
     if (teachdb != NULL) {
@@ -1081,14 +1142,18 @@ void MainWindow::on_fund_delete_sort_clicked() {
     }
 }
 
-void MainWindow::on_teach_bar_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_teach_pie_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pub_bar_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_teach_bar_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(2);}
+void MainWindow::on_teach_pie_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_teach_stat_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(0);}
+void MainWindow::on_pub_bar_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_pub_pie_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pres_bar_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pub_stat_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pres_bar_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_pres_pie_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pres_stat_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_fund_pie_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(0);}
+void MainWindow::on_fund_stat_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(1);}
 
 void MainWindow::on_teach_load_file_clicked() {
     /*
@@ -1111,6 +1176,7 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         ui->teach_filter_to->setEnabled(true);
         ui->teach_pie_button->setEnabled(true);
         ui->teach_bar_button->setEnabled(true);
+        ui->teach_stat_button->setEnabled(true);
         ui->teach_to_label->setEnabled(true);
         ui->teach_sort_label->setEnabled(true);
         ui->teach_filter->setEnabled(true);
@@ -1167,6 +1233,7 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         ui->pub_filter_to->setEnabled(true);
         ui->pub_pie_button->setEnabled(true);
         ui->pub_bar_button->setEnabled(true);
+        ui->pub_stat_button->setEnabled(true);
         ui->pub_to_label->setEnabled(true);
         ui->pub_sort_label->setEnabled(true);
         ui->pub_filter->setEnabled(true);
@@ -1223,6 +1290,7 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         ui->pres_filter_to->setEnabled(true);
         ui->pres_pie_button->setEnabled(true);
         ui->pres_bar_button->setEnabled(true);
+        ui->pres_stat_button->setEnabled(true);
         ui->pres_to_label->setEnabled(true);
         ui->pres_sort_label->setEnabled(true);
         ui->pres_filter->setEnabled(true);
@@ -1278,6 +1346,7 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         ui->fund_filter_to->setEnabled(true);
         ui->fund_pie_button->setEnabled(true);
         ui->fund_bar_button->setEnabled(true);
+        ui->fund_stat_button->setEnabled(true);
         ui->fund_to_label->setEnabled(true);
         ui->fund_sort_label->setEnabled(true);
         ui->fund_filter->setEnabled(true);
@@ -1498,6 +1567,7 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
             ui->teachBarChart->replot();
 
             setupPieChart(ui->teachPieChart, ui->teachPieList, chartList);
+            setupBoxPlot(ui->teachBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->teachGraphTitle->setText("Total " + clickedName + " Teaching by " +
@@ -1548,6 +1618,7 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
             ui->pubBarChart->replot();
 
             setupPieChart(ui->pubPieChart, ui->pubPieList, chartList);
+            setupBoxPlot(ui->pubBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
@@ -1598,6 +1669,7 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
             ui->presBarChart->replot();
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
+            setupBoxPlot(ui->presBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
@@ -1645,6 +1717,7 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
                 ui->fundBarChart->replot();
 
                 setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
+                setupBoxPlot(ui->fundBoxPlot, chartList);
 
                 if (parentsList.size()>1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
