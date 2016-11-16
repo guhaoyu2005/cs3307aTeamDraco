@@ -84,9 +84,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pubExportButton->setEnabled(false);
     ui->presExportButton->setEnabled(false);
 
+#ifndef QT_NO_PROCESS
     //Setup printer
     printer = new QPrinter();
-
+#endif
     dateChanged = {false, false, false, false};
 
     //Load Serialized States - Team Draco 2016
@@ -106,7 +107,9 @@ MainWindow::~MainWindow() {
     delete presdb;
     delete pubdb;
     delete teachdb;
+#ifndef QT_NO_PROCESS
     delete printer;
+#endif
 }
 
 void MainWindow::on_actionLoad_file_triggered() {
@@ -349,7 +352,11 @@ int MainWindow::checkFile(int index, QString filePath) {
         } else {
             return EXIT_SUCCESS;
         }
+#ifndef QT_NO_PROCESS
         ui->teachPrintButton->setEnabled(true);
+#else
+        ui->teachPrintButton->setVisible(false);
+#endif
         ui->teachExportButton->setEnabled(true);
         break;
 
@@ -406,7 +413,12 @@ int MainWindow::checkFile(int index, QString filePath) {
         } else {
             return EXIT_SUCCESS;
         }
+
+#ifndef QT_NO_PROCESS
         ui->pubPrintButton->setEnabled(true);
+#else
+        ui->pubPrintButton->setVisible(false);
+#endif
         ui->pubExportButton->setEnabled(true);
         break;
 
@@ -464,7 +476,13 @@ int MainWindow::checkFile(int index, QString filePath) {
         } else {
             return EXIT_SUCCESS;
         }
+
+#ifndef QT_NO_PROCESS
         ui->presPrintButton->setEnabled(true);
+#else
+        ui->presPrintButton->setVisible(false);
+#endif
+
         ui->presExportButton->setEnabled(true);
         break;
 
@@ -528,7 +546,13 @@ int MainWindow::checkFile(int index, QString filePath) {
         } else {
             return EXIT_SUCCESS;
         }
+
+#ifndef QT_NO_PROCESS
         ui->fundPrintButton->setEnabled(true);
+#else
+        ui->fundPrintButton->setVisible(false);
+#endif
+
         ui->fundExportButton->setEnabled(true);
         break;
     }
@@ -1662,6 +1686,7 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
     }
 }
 
+#ifndef QT_NO_PROCESS
 void MainWindow::on_teachPrintButton_clicked()
 {
     QPrintDialog printDialog(printer, this);
@@ -1739,7 +1764,7 @@ void MainWindow::on_teachExportButton_clicked()
     }
 
 }
-
+#endif
 void MainWindow::on_fundExportButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),

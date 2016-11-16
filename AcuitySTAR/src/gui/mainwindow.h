@@ -108,6 +108,8 @@ private slots:
 
     void on_pubExportButton_clicked();
 
+    void on_teachTreeView_activated(const QModelIndex &index);
+
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
 

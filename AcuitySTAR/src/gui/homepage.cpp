@@ -25,4 +25,5 @@ void HomePage::on_commandLinkButton_clicked()
 {
     MainWindow *w = new MainWindow();
     w->show();
+    this->close();
 }
