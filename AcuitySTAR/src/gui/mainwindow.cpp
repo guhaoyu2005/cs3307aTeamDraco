@@ -761,8 +761,32 @@ void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWid
     int pieSize = (int) pieChartList.size();
     QVector<QColor> colorList(pieSize);
     pieListWidget->clear();
+
+    //Selection ofFlat UI Colors
+    QColor flatColors[8] = {
+                QColor(44, 62, 80),
+                QColor(142, 68, 173),
+                QColor(41, 128, 185),
+                QColor(39, 174, 96),
+                QColor(22, 160, 133),
+                QColor(192, 57, 43),
+                QColor(211, 84, 0),
+                QColor(243, 156, 18)
+            };
+
+    //Base Color randomly chosen from Flat UI
+    QColor baseColor = flatColors[qrand() % 8];
+
+    //Lightening Factor based on pieSize
+    int iFact = 100/pieSize;
+    if(iFact < 1) iFact = 1;
+
     for (int i = 0; i < pieSize; i++) {
-        colorList[i] = (QColor(qrand() % 256, qrand() % 256, qrand() % 256));
+        //Nope We are going to use HSV
+        //colorList[i] = (QColor(qrand() % 256, qrand() % 256, qrand() % 256));
+
+        //Use HSV Mode Lightening to compute color
+        colorList[i] = (baseColor.lighter(100 + i*iFact));
         pieListWidget->addItem(QString::fromStdString(pieChartList[i].first));
 
         // set legend colors
