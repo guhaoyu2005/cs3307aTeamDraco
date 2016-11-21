@@ -102,11 +102,16 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
 //Clean up allocated memory for the table items
 ErrorEditDialog::~ErrorEditDialog()
 {
+    /*
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         for (int j = 0; j < ui->tableWidget->columnCount(); j++) {
             delete ui->tableWidget->item(i,j);
         }
     }
+    delete ui;
+    */
+    ui->tableWidget->clearContents();
+    ui->tableWidget->clear();
     delete ui;
 }
 
