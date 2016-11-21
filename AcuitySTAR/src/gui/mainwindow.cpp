@@ -337,11 +337,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH)) {
+                    handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH);
+                    /*if(handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             teachdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
                     }
+                    */
                 }
             } else {
                 return EXIT_FAILURE;
@@ -394,11 +396,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, PUBS_MANFIELDS, filePath, PUBLICATIONS);
+                    /*
                     if(handle_field_errors(f_errs, header, PUBS_MANFIELDS, filePath, PUBLICATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             pubdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -452,11 +456,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, PRES_MANFIELDS, filePath, PRESENTATIONS);
+                    /*
                     if(handle_field_errors(f_errs, header, PRES_MANFIELDS, filePath, PRESENTATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             presdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -516,11 +522,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                     }
                 }
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, GRANTS_MANFIELDS, filePath, FUNDING);
+                    /*
                     if(handle_field_errors(f_errs, header, GRANTS_MANFIELDS, filePath, FUNDING)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             funddb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -633,17 +641,22 @@ bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err
     }
     QMessageBox prompt;
     QString mainText = "";
+    CSVReader::CSVFileType type;
     switch(tab){
     case TEACH:
+        type = CSVReader::CSVFileTypeTeaching;
         mainText.append("Teaching File: ");
         break;
     case PUBLICATIONS:
+        type = CSVReader::CSVFileTypePublications;
         mainText.append("Publications File: ");
         break;
     case PRESENTATIONS:
+        type = CSVReader::CSVFileTypePresentations;
         mainText.append("Presentations File: ");
         break;
     case FUNDING:
+        type = CSVReader::CSVFileTypeGrants;
         mainText.append("Funding File: ");
         break;
     }
@@ -662,8 +675,9 @@ bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err
 
     switch (ret) {
     case QMessageBox::Yes: {
-        ErrorEditDialog diag(this, err, headers, mandatory);
+        ErrorEditDialog diag(this, type, filePath.toStdString());
         if(diag.exec()) {
+            checkFile(tab, filePath);
             return true;
         }
         return false;

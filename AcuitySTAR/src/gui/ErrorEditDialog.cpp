@@ -1,5 +1,6 @@
 #include "ui_ErrorEditDialog.h"
 #include "ErrorEditDialog.h"
+#include "database/CSVWriter.h"
 
 #include <QTableWidgetItem>
 #include <QStringList>
@@ -8,6 +9,36 @@
 #include <QColor>
 #include <QAbstractButton>
 #include <QMessageBox>
+
+bool ErrorEditDialog::isManfields(CSVReader::CSVFileType fileType, std::string cmpString) {
+    switch (fileType) {
+    case CSVReader::CSVFileTypeTeaching: {
+        for (int i=0;i<TEACH_MANFIELDS.size();i++)
+            if (TEACH_MANFIELDS[i]==cmpString)
+                return true;
+        break;
+    }
+    case CSVReader::CSVFileTypePublications: {
+        for (int i=0;i<PUBS_MANFIELDS.size();i++)
+            if (PUBS_MANFIELDS[i]==cmpString)
+                return true;
+        break;
+    }
+    case CSVReader::CSVFileTypePresentations: {
+        for (int i=0;i<PRES_MANFIELDS.size();i++)
+            if (PRES_MANFIELDS[i]==cmpString)
+                return true;
+        break;
+    }
+    case CSVReader::CSVFileTypeGrants: {
+        for (int i=0;i<GRANTS_MANFIELDS.size();i++)
+            if (GRANTS_MANFIELDS[i]==cmpString)
+                return true;
+        break;
+    }
+    }
+    return false;
+}
 
 /*
  * Load data contained in the errors vector into a QWidgetTable
@@ -19,40 +50,47 @@
  * are discarded.
  */
 ErrorEditDialog::ErrorEditDialog(QWidget *parent,
-                                 std::vector<std::vector<std::string>*>& errors,
-                                 std::vector<std::string>& headers,
-                                 std::vector<std::string>& mandatory) :
+                CSVReader::CSVFileType fileType,
+                std::string filePath) :
     QDialog(parent, Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
-    errorList(errors),
-    headerList(headers),
-    mandatoryList(mandatory),
+    type(fileType),
+    path(filePath),
     ui(new Ui::ErrorEditDialog)
-{
+{   
     ui->setupUi(this);
-    ui->tableWidget->setRowCount((int) errors.size());
-    ui->tableWidget->setColumnCount((int) headers.size());
 
     QStringList listHeaders;
-    for (int i = 0; i < (int) headers.size(); i++) {
-        listHeaders << headers[i].c_str();
+
+    CSVReader reader = CSVReader(filePath);
+    reader.loadCSV(filePath);
+    std::string errMsg;
+    header = reader.getHeaders();
+    for (int i=0; i<header.size();i++) {
+        listHeaders<<header[i].c_str();
     }
+    data.clear();
+    data = reader.getData();
+
+    ui->tableWidget->setRowCount((int) data.size());
+    ui->tableWidget->setColumnCount((int) header.size());
 
     ui->tableWidget->setHorizontalHeaderLabels(listHeaders);
     QTableWidgetItem* item;
-    QBrush brush(QColor(255, 0, 0, 100));
-    std::vector<std::vector<std::string>*>::iterator it;
+    QBrush brushRed(QColor(255, 0, 0, 100));
+    QBrush brushWhite(QColor(255, 255, 255, 100));
+    std::vector<std::vector<std::string>>::iterator it;
     int row = 0;
-    for (it = errors.begin(); it != errors.end(); it++) {
-        for (int col = 0; col < (int) headers.size() && col < (int) (*it)->size(); col++) {
+    for (it = data.begin(); it != data.end(); it++) {
+        for (int col = 0; col < (int) header.size(); col++) {
             item = new QTableWidgetItem();
-            Qt::ItemFlags flag = item->flags();
-            item->setFlags(Qt::ItemIsSelectable);
-            item->setText((*it)->at(col).c_str());
-            for (int i = 0; i < (int) mandatory.size(); i++) {
-                if (mandatory[i].compare(headers.at(col)) == 0
-                        && (*it)->at(col).compare("") == 0) {
-                    item->setBackground(brush);
-                    item->setFlags(flag);
+            if (col < (int) (it)->size())
+                item->setText((it)->at(col).c_str());
+            else
+                item->setText("");
+
+            if (isManfields(type, header[col])) {
+                if ((it)->at(col).compare("") == 0) {
+                    item->setBackground(brushRed);
                 }
             }
             ui->tableWidget->setItem(row, col, item);
@@ -72,8 +110,108 @@ ErrorEditDialog::~ErrorEditDialog()
     delete ui;
 }
 
+bool ErrorEditDialog::errorCheck() {
+    return true;
+    QBrush brushRed(QColor(255, 0, 0, 100));
+    QBrush brushNormal(QColor(0, 0, 0, 100));
+    bool rt = true;
+    //true for passing
+    for (int row = 0; row < ui->tableWidget->rowCount(); row++) {
+        for (int col = 0; col < ui->tableWidget->columnCount(); col++) {
+            if (data[row][col].compare("") != 0) {
+                ui->tableWidget->item(row, col)->setBackground(brushRed);
+                rt = false;
+            }
+            else {
+                ui->tableWidget->item(row, col)->setBackground(brushNormal);
+            }
+        }
+    }
+    return rt;
+}
+
+void ErrorEditDialog::saveToFile() {
+
+}
+
 //Save the new data entered by the user via the error reference var
 void ErrorEditDialog::saveData() {
+    if (!errorCheck()) {
+        QMessageBox::StandardButton msgbox;
+        msgbox = QMessageBox::question(this, "Info", "There are some errors exist still, continue? \n", QMessageBox::Yes|QMessageBox::No);
+        if (msgbox == QMessageBox::No) {
+            //do nothing and return
+            return;
+        }
+    }
+
+    CSVWriter writer;
+    if (writer.isExistingBackup(path)) {
+        QMessageBox::StandardButton msgbox;
+        msgbox = QMessageBox::question(this, "Info", "Seems your last saving process was failed, continue? \n", QMessageBox::Yes|QMessageBox::No);
+        if (msgbox == QMessageBox::No) {
+            //do nothing and return
+            return;
+        }
+    }
+
+    data.clear();
+    for (int row = 0; row < ui->tableWidget->rowCount(); row++) {
+        std::vector<std::string> pVec;
+        for (int col = 0; col < ui->tableWidget->columnCount(); col++) {
+            pVec.push_back((ui->tableWidget->item(row, col)->text()=="")?"":ui->tableWidget->item(row, col)->text().toStdString());
+            //qDebug ("ROW:%d COL:%d-> %s\n",row,col,ui->tableWidget->item(row, col)->text().toStdString().c_str());
+        }
+        data.push_back(pVec);
+    }
+
+    if (writer.writeToCSV(path, header, data)) {
+        //success
+    }
+    else {
+        QMessageBox::StandardButton msgbox;
+        msgbox = QMessageBox::information(this, "Info", "Failed to save your data.\n", QMessageBox::Ok);
+        if (msgbox == QMessageBox::Ok) {
+            //do nothing and return
+            return;
+        }
+        return;
+    }
+
+/*
+    if (type==CSVReader::CSVFileTypeGrants) {
+        if (writer.writeToCSVDueToShitCodeForGrantShits(path, header, data)) {
+            //success
+        }
+        else {
+            QMessageBox::StandardButton msgbox;
+            msgbox = QMessageBox::information(this, "Info", "Failed to save your data.\n", QMessageBox::Ok);
+            if (msgbox == QMessageBox::Ok) {
+                //do nothing and return
+                return;
+            }
+            return;
+        }
+    }
+    else {
+        if (writer.writeToCSV(path, header, data)) {
+            //success
+        }
+        else {
+            QMessageBox::StandardButton msgbox;
+            msgbox = QMessageBox::information(this, "Info", "Failed to save your data.\n", QMessageBox::Ok);
+            if (msgbox == QMessageBox::Ok) {
+                //do nothing and return
+                return;
+            }
+            return;
+        }
+    }
+*/
+
+
+
+    /*
     for (int row = 0; row < ui->tableWidget->rowCount(); row++) {
         for (int col = 0; col < ui->tableWidget->columnCount() && col < (int) errorList[row]->size(); col++) {
             std::vector<std::string>::iterator it = errorList[row]->begin()+col;
@@ -83,12 +221,23 @@ void ErrorEditDialog::saveData() {
             }
         }
     }
+    */
     accept();
 }
 
 void ErrorEditDialog::on_save_clicked()
 {
     bool search = true;
+
+    for (int row = 0; row < ui->tableWidget->rowCount() && search; row++) {
+        for (int j = 0; j < (int) mandatoryList.size() && search; j++) {
+            std::vector<std::string>::iterator it = std::find(headerList.begin(), headerList.end(), mandatoryList[j]);
+            int col = it - headerList.begin();
+            QTableWidgetItem* item = ui->tableWidget->item(row, col);
+            data[row][col] = item->text().toStdString();
+        }
+    }
+
     //check if mandatory fields have been filled
     for (int row = 0; row < ui->tableWidget->rowCount() && search; row++) {
         for (int j = 0; j < (int) mandatoryList.size() && search; j++) {
