@@ -761,8 +761,20 @@ void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWid
     int pieSize = (int) pieChartList.size();
     QVector<QColor> colorList(pieSize);
     pieListWidget->clear();
+
+    //Base Color randomly chosen from Flat UI
+    QColor baseColor = flatColors[qrand() % 8];
+
+    //Lightening Factor based on pieSize
+    int iFact = 100/pieSize;
+    if(iFact < 1) iFact = 1;
+
     for (int i = 0; i < pieSize; i++) {
-        colorList[i] = (QColor(qrand() % 256, qrand() % 256, qrand() % 256));
+        //Nope We are going to use HSV
+        //colorList[i] = (QColor(qrand() % 256, qrand() % 256, qrand() % 256));
+
+        //Use HSV Mode Lightening to compute color
+        colorList[i] = (baseColor.lighter(100 + i*iFact));
         pieListWidget->addItem(QString::fromStdString(pieChartList[i].first));
 
         // set legend colors
@@ -780,13 +792,19 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     QCPBars *yLabels = new QCPBars(barChart->yAxis, barChart->xAxis);
     barChart->addPlottable(yLabels);
 
+    //Base Color randomly chosen from Flat UI
+    QColor baseColor = flatColors[qrand() % 8];
+
     // set names and colors:
     QPen pen;
     pen.setWidthF(1.2);
     yLabels->setName("Type");
-    pen.setColor(QColor(255, 131, 0));
+    //pen.setColor(QColor(255, 131, 0));
+    pen.setColor(QColor(baseColor));
     yLabels->setPen(pen);
-    yLabels->setBrush(QColor(255, 131, 0, 50));
+    QColor innerColor = QColor(baseColor);
+    innerColor.setAlpha(50);
+    yLabels->setBrush(innerColor);
 
     //get label list
     int barSize = (int) barChartList.size();
@@ -1970,5 +1988,3 @@ void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
 
 //Adding QTestClasses as Friends
 //friend Rectangle duplicate (const Rectangle&);
-
-
