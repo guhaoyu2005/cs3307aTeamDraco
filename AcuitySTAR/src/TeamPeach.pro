@@ -44,7 +44,8 @@ HEADERS += \
     testing/test_3.1.h \
     testing/test_2.1.h \
     testing/test_4.1.h \
-    gui/homepage.h
+    gui/homepage.h \
+    database/CSVWriter.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -69,7 +70,8 @@ SOURCES += \
     testing/test_3.1.cpp \
     testing/test_2.1.cpp \
     testing/tc_4.1.cpp \
-    gui/homepage.cpp
+    gui/homepage.cpp \
+    database/CSVWriter.cpp
 
 FORMS += \
     gui/customsort.ui \

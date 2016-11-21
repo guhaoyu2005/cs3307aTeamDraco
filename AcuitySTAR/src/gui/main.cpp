@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     if (test) {
         QTTestNewSortOrder *test_SortOrder = new QTTestNewSortOrder();
         QTTestLoadFile *load_previous = new QTTestLoadFile();
-        QTest::qExec(test_SortOrder);
+        //QTest::qExec(test_SortOrder);
         //QTest::qExec(load_previous);
     }
 
