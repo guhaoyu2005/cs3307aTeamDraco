@@ -138,6 +138,13 @@ void MainWindow::on_actionLoad_file_triggered() {
     }
 }
 
+/**
+ * @brief MainWindow::on_actionExit_triggered
+ * Close the Window from the File Menu.
+ */
+void MainWindow::on_actionExit_triggered() {
+    this->close();
+}
 
 /*
  * When the load file button is clicked a file open dialog box

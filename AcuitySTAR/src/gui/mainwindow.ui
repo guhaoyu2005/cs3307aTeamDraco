@@ -2552,6 +2552,7 @@ p, li { white-space: pre-wrap; }
      <string>File</string>
     </property>
     <addaction name="actionLoad_file"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -2564,6 +2565,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="toolTip">
     <string>Load file or multiple files</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>
