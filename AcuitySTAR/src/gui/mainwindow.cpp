@@ -30,6 +30,7 @@
 #define TEACHORDER_SAVE "teachsortorder.dat"
 //Persistence - Team Draco 2016
 #define PREVIOUS_FILES_SAVE "previousfiles.dat"
+#define MODELS_SERIALIZATION "models.dat"
 
 std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date"};
 std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
@@ -168,6 +169,9 @@ bool MainWindow::checkTargetTabHasFileLoaded(TABS tabId) {
     case FUNDING: {
         return funddb?true:false;
     }
+    default: {
+        return false;
+    }
     }
 }
 
@@ -243,6 +247,9 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                     load_fund(filePath);
                     ui->categoryTab->setCurrentIndex(3);
                     break;
+                }
+                case CSVReader::CSVFileTypeBadFile:{
+                    //Do Nothing
                 }
             }
         }
@@ -1423,7 +1430,7 @@ bool MainWindow::load_serialized_paths(QString path) {
             //Move Following Functionality Later
             //Ask user if they want to reload previous files
             QMessageBox::StandardButton userReply;
-            userReply = QMessageBox::question(this, "Test", "Load Previous Files?", QMessageBox::Yes|QMessageBox::No);
+            userReply = QMessageBox::question(this, "Load Previous Files", "Load Previous Files?", QMessageBox::Yes|QMessageBox::No);
             if (userReply == QMessageBox::Yes) {
                 qDebug() << "Loading Previous Files";
 
@@ -1491,6 +1498,61 @@ bool MainWindow::serialize_loaded_paths(QString path) {
 
     return true;
 }
+
+/**
+ * @brief MainWindow::load_serialized_models
+ * @param path The path to load the models from
+ * @return If Successful
+ */
+bool MainWindow::load_serialized_models(QString path){
+    // open the file for reading
+    QFile file(path);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "no previous files data file loaded";
+        return false;
+    }
+
+    // read the data serialized from the file
+    QDataStream in(&file);
+
+    // extract sort fields
+//    in >> this->teachdb >> this->teachPath >> this->teachTree;
+//    in >> this->pubdb >> this->pubPath >> this->pubTree;
+//    in >> this->presdb >> this->presPath >> this->presTree;
+//    in >> this->funddb >> this->fundPath >> this->fundTree;
+
+    return true;
+}
+
+/**
+ * @brief MainWindow::serialize_models
+ * @param path The patht os ave the models to
+ * @return If Successful
+ */
+bool MainWindow::serialize_models(QString path){
+    //PREVIOUS_FILES_SAVE
+    qDebug() << "Saving to: " << path;
+
+    // open the file for writing
+    QFile file(path);
+    file.open(QIODevice::WriteOnly);
+
+    // we will serialize the data into the file
+    QDataStream out(&file);
+
+    // serialize the sort fields
+
+    out << this->teachdb << this->teachPath << this->teachTree;
+    out << this->pubdb << this->pubPath << this->pubTree;
+    out << this->presdb << this->presPath << this->presTree;
+    out << this->funddb << this->fundPath << this->fundTree;
+
+    // close the file, we're done
+    file.close();
+    return true;
+}
+
 
 void MainWindow::on_FromDate_dateChanged(const QDate &date) {
     // set the member variable to the new date
@@ -1985,6 +2047,23 @@ void MainWindow::on_pres_filter_from_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
 void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    //Ask user if they want to reload previous files
+//    QMessageBox::StandardButton userReply;
+//    userReply = QMessageBox::question(this, "Exit", "Do you want to save this session", QMessageBox::Yes|QMessageBox::No);
+//    if (userReply == QMessageBox::Yes) {
+//        qDebug() << "Save Session";
+//        serialize_models(MODELS_SERIALIZATION);
+
+//    } else {
+//        qDebug() << "Nuking Session";
+//        //Do Nothing Let System close
+//    }
+    event->accept();
+    this->close();
+}
 
 //Adding QTestClasses as Friends
 //friend Rectangle duplicate (const Rectangle&);

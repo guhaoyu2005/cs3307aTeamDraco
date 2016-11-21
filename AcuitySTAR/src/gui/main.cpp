@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    int test = 1;   /* test on = 1 off = 0 */
+    int test = 0;   /* test on = 1 off = 0 */
     if (test) {
         //Initialize Test Classes
         QTTestCSVReader *test_csv = new QTTestCSVReader();

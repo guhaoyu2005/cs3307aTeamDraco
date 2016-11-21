@@ -181,10 +181,14 @@ private:
 
     bool serialize_loaded_paths(QString save_path);
     bool load_serialized_paths(QString save_path);
+    bool serialize_models(QString save_path);
+    bool load_serialized_models(QString save_path);
     friend class QTTestLoadFile;
 
     bool checkTargetTabHasFileLoaded(TABS);
     void loadFileAndSwitchToProperTab();
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

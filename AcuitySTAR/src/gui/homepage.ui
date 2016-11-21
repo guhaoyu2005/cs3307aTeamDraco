@@ -23,9 +23,9 @@
    <widget class="QCommandLinkButton" name="commandLinkButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>290</y>
-      <width>171</width>
+      <x>270</x>
+      <y>280</y>
+      <width>211</width>
       <height>61</height>
      </rect>
     </property>
@@ -37,12 +37,15 @@
     <property name="text">
      <string>Get Started</string>
     </property>
+    <property name="icon">
+     <iconset theme="none"/>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>200</y>
+      <x>290</x>
+      <y>220</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -60,44 +63,6 @@
      <number>5</number>
     </property>
    </widget>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0.972, x2:0.847, y2:0.199, stop:0 rgba(162, 162, 162, 255), stop:1 rgba(150, 220, 225, 185));</string>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionClose_All"/>
-   </widget>
-   <widget class="QMenu" name="menuWindow">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>Window</string>
-    </property>
-    <addaction name="actionHi"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionPeachy_Galaxy_help"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuWindow"/>
-   <addaction name="menuHelp"/>
   </widget>
   <action name="actionWindow">
    <property name="text">
