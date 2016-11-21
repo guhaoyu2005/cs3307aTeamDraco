@@ -885,76 +885,132 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
 
 //set up for the Box Plot (added new chart)
 void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::string, double>> boxPlotList){
-    QCPStatisticalBox *statistical = new QCPStatisticalBox(boxPlot->xAxis, boxPlot->yAxis);
-    QBrush boxBrush(QColor(60, 60, 255, 100));
-    boxBrush.setStyle(Qt::Dense6Pattern); // make it look oldschool
-    statistical->setBrush(boxBrush);
 
-    //setData(double key, double minimum, double lowerQuartile, double median, double upperQuartile, double maximum)
-    int boxSize = (int) boxPlotList.size();
-    double maxCount = 0;
-    double scaledCount;
+    boxPlot->clearPlottables();
+
+    // create empty bar chart objects:
+    QCPStatisticalBox *xLabels = new QCPStatisticalBox(boxPlot->xAxis, boxPlot->yAxis);
+    boxPlot->addPlottable(xLabels);
+
+    // set names and colors:
+    QPen pen;
+    pen.setWidthF(1.2);
+    xLabels->setName("Type");
+    pen.setColor(QColor(127, 127, 255));
+    xLabels->setPen(pen);
+    xLabels->setBrush(QColor(0, 0, 255, 50));
+
+    //get label list
+    int labelsSize = (int)boxPlotList.size();
+    double scale = 1;
     QVector<double> ticks;
-    QVector<QString> xlabels;
-    QVector<double> count;
-    for (int i = 0; i < boxSize; i++){
-        ticks << (i+1);
-        //getting x labels
-        xlabels << QString::fromStdString(boxPlotList[i].first);
-        statistical->setData(boxPlotList[i].second,boxPlotList[i].second, boxPlotList[i].second,
-                             boxPlotList[i].second,boxPlotList[i].second,boxPlotList[i].second);
-        // setting the data with values
-        if (boxPlotList[i].second>1000000){
-            scaledCount = boxPlotList[i].second/1000000;
-        } else if (boxPlotList[i].second>1000){
-            scaledCount = boxPlotList[i].second/1000;
-        } else{
-            scaledCount = boxPlotList[i].second;
-        }
-        count <<scaledCount;
+    QVector<QString> ylabels;
 
-        if (maxCount < boxPlotList[i].second)
-            maxCount = boxPlotList[i].second;
+    // init min and max value for boxplot
+    double min = -1;
+    double max = -1;
+    std::vector<double> dataSet;
+
+    // get the data
+    for (int i = 0; i < labelsSize; i++)
+    {
+        double datum = boxPlotList[i].second;
+        dataSet.push_back(datum);
     }
+    // first quartile / median / third quartile require a sorted data set
+    sort(dataSet.begin(), dataSet.end());
 
-    //add label list to x axis labels
-    if(maxCount>1000000){
-        maxCount = maxCount/1000000;
-        boxPlot->yAxis->setLabel("Total (in Millions)");
-    }else if (maxCount>1000){
-        maxCount = maxCount/1000;
-        boxPlot->yAxis->setLabel("Total (in Thousands)");
-    }else{
-        boxPlot->yAxis->setLabel("Total");
+    min = dataSet[0];
+    max = dataSet[dataSet.size() - 1];
+
+    // scaling (because some of them are large values (ex: grant)
+    if (max > 1000)
+    {
+        scale = 1000;
     }
+    else if (max > 1000000)
+    {
+        scale = 1000000;
+    }
+    min /= scale;
+    max /= scale;
 
+    double lowerQuartile, middleQuartile = 0, upperQuartile;
+    int lowInd, highInd;
+
+    //use median function to get values)
+    median(dataSet, 0, (int)dataSet.size() - 1, middleQuartile, lowInd, highInd);
+    lowerQuartile = middleQuartile;
+    upperQuartile = middleQuartile;
+    median(dataSet, 0, lowInd, lowerQuartile, lowInd, lowInd);
+    median(dataSet, highInd, (int)dataSet.size() - 1, upperQuartile, highInd, highInd);
+
+    // Scale the data
+    lowerQuartile /= scale;
+    middleQuartile /= scale;
+    upperQuartile /= scale;
+
+    //set Data
+    xLabels->setData(1, min, lowerQuartile, middleQuartile, upperQuartile, max);
 
     //setup X Axis
     boxPlot->xAxis->setAutoTicks(false);
     boxPlot->xAxis->setAutoTickLabels(false);
     boxPlot->xAxis->setTickVector(ticks);
-    boxPlot->xAxis->setTickVectorLabels(xlabels);
+    boxPlot->xAxis->setTickVectorLabels(ylabels);
     boxPlot->xAxis->setTickLabelPadding(1);
     boxPlot->xAxis->setSubTickCount(0);
     boxPlot->xAxis->setTickLength(0, 1);
     boxPlot->xAxis->grid()->setVisible(true);
-    boxPlot->xAxis->setRange(0, boxSize+1);
+    boxPlot->xAxis->setRange(0, 2);
 
     // setup Y Axis
+    // Set Y labels depends on its sclae
+    if (scale == 1000000) {
+        boxPlot->yAxis->setLabel("Total (in Millions)");
+    }
+    else if (scale == 1000) {
+        boxPlot->yAxis->setLabel("Total (in Thousands)");
+    }
+    else {
+        boxPlot->yAxis->setLabel("Total");
+    }
+    // Set rest of Y stuff
     boxPlot->yAxis->setAutoTicks(true);
-    boxPlot->yAxis->setRange(0,maxCount+(maxCount*.05));
+    boxPlot->yAxis->setRange(0, max + (max*.05));
     boxPlot->yAxis->setAutoTickLabels(true);
     boxPlot->yAxis->setAutoTickStep(true);
     boxPlot->yAxis->grid()->setSubGridVisible(true);
 
-    /*
-    // prepare axes:
-    boxPlot->rescaleAxes();
-    boxPlot->xAxis->setTickVectorLabels(xlabels);
-    //boxPlot->xAxis->scaleRange(1.7, boxPlot->xAxis->range().center());
-    boxPlot->yAxis->setRange(0, 7);*/
+    QPen gridPen;
+    gridPen.setStyle(Qt::SolidLine);
+    gridPen.setColor(QColor(0, 0, 0, 25));
+    boxPlot->yAxis->grid()->setPen(gridPen);
+    gridPen.setStyle(Qt::DotLine);
+    boxPlot->yAxis->grid()->setSubGridPen(gridPen);
+    // Set so graph can be moved by mouse drag
     boxPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    boxPlot->replot();
+}
 
+//private function to calculate median
+void MainWindow::median(std::vector<double> &data, int low, int high, double &median, int &newLow, int &newHigh) {
+    if (data.size() == 0 || low > high) {
+        newLow = 0;
+        newHigh = 0;
+        return;
+    }
+    int mid = (high + low) / 2;
+    if ((high - low) % 2 == 0) {
+        median = data[mid];
+        newLow = mid - 1;
+        newHigh = mid + 1;
+    }
+    else {
+        median = (data[mid] + data[mid + 1]) / 2;
+        newLow = mid;
+        newHigh = mid + 1;
+    }
 }
 
 void MainWindow::on_teach_new_sort_clicked() {
