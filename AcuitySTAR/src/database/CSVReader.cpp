@@ -3,10 +3,13 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
+#include <QDebug>
 #include "database/CSVReader.h"
 
 // Loads the CSV file at file_name.
+
+
+
 
 void CSVReader::loadCSV(std::string file_name) {
     std::ifstream myfile(file_name.c_str());
@@ -15,6 +18,8 @@ void CSVReader::loadCSV(std::string file_name) {
         return;
     }
 	
+    all_data.clear();
+
     if (myfile.is_open()) {
 		std::stringstream sstr;
 		sstr << myfile.rdbuf();
@@ -50,6 +55,14 @@ void CSVReader::loadCSV(std::string file_name) {
                 }
                 pos++;
 			}
+            if (f.at( pos ) == '\n') {
+                if (pos-1>=0) {
+                    if (f.at(pos-1)==',') {
+                        std::string foo = "";
+                        line.push_back(foo);
+                    }
+                }
+            }
 			if( !setHeaders ) {
 				setHeaders = true;
 				headers = line;

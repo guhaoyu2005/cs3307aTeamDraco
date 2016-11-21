@@ -112,9 +112,9 @@ private slots:
 
     void on_pubExportButton_clicked();
 
-    void on_getStartedButton_clicked();
+    //void on_getStartedButton_clicked();
 
-    void on_stackedWidget_destroyed();
+    //void on_stackedWidget_destroyed();
 
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;

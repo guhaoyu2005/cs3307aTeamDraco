@@ -344,11 +344,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
-                    if(handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH)) {
+                    handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH);
+                    /*if(handle_field_errors(f_errs, header, TEACH_MANFIELDS, filePath, TEACH)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             teachdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
                     }
+                    */
                 }
             } else {
                 return EXIT_FAILURE;
@@ -401,11 +403,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, PUBS_MANFIELDS, filePath, PUBLICATIONS);
+                    /*
                     if(handle_field_errors(f_errs, header, PUBS_MANFIELDS, filePath, PUBLICATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             pubdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -459,11 +463,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                 }
 
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, PRES_MANFIELDS, filePath, PRESENTATIONS);
+                    /*
                     if(handle_field_errors(f_errs, header, PRES_MANFIELDS, filePath, PRESENTATIONS)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             presdb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -523,11 +529,13 @@ int MainWindow::checkFile(int index, QString filePath) {
                     }
                 }
                 if (f_errs.size() > 0) {
+                    handle_field_errors(f_errs, header, GRANTS_MANFIELDS, filePath, FUNDING);
+                    /*
                     if(handle_field_errors(f_errs, header, GRANTS_MANFIELDS, filePath, FUNDING)) {
                         for (unsigned int i = 0; i < f_errs.size(); i++) {
                             funddb->addRecord(reader.parseDateString((*(f_errs[i]))[sortHeaderIndex]), f_errs[i]);
                         }
-                    }
+                    }*/
                 }
             } else {
                 return EXIT_FAILURE;
@@ -640,17 +648,22 @@ bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err
     }
     QMessageBox prompt;
     QString mainText = "";
+    CSVReader::CSVFileType type;
     switch(tab){
     case TEACH:
+        type = CSVReader::CSVFileTypeTeaching;
         mainText.append("Teaching File: ");
         break;
     case PUBLICATIONS:
+        type = CSVReader::CSVFileTypePublications;
         mainText.append("Publications File: ");
         break;
     case PRESENTATIONS:
+        type = CSVReader::CSVFileTypePresentations;
         mainText.append("Presentations File: ");
         break;
     case FUNDING:
+        type = CSVReader::CSVFileTypeGrants;
         mainText.append("Funding File: ");
         break;
     }
@@ -669,8 +682,9 @@ bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err
 
     switch (ret) {
     case QMessageBox::Yes: {
-        ErrorEditDialog diag(this, err, headers, mandatory);
+        ErrorEditDialog diag(this, type, filePath.toStdString());
         if(diag.exec()) {
+            checkFile(tab, filePath);
             return true;
         }
         return false;
@@ -894,6 +908,8 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
         ticks << (i+1);
         //getting x labels
         xlabels << QString::fromStdString(boxPlotList[i].first);
+        statistical->setData(boxPlotList[i].second,boxPlotList[i].second, boxPlotList[i].second,
+                             boxPlotList[i].second,boxPlotList[i].second,boxPlotList[i].second);
         // setting the data with values
         if (boxPlotList[i].second>1000000){
             scaledCount = boxPlotList[i].second/1000000;
@@ -1434,21 +1450,28 @@ bool MainWindow::load_serialized_paths(QString path) {
             if (userReply == QMessageBox::Yes) {
                 qDebug() << "Loading Previous Files";
 
+                int tabTogo = 0;
                 if(paths[0].size() > 0){
                     load_teach(paths[0]);
+                    tabTogo = 0;
                 }
 
                 if(paths[1].size() > 0){
                     load_pub(paths[1]);
+                    tabTogo = 1;
                 }
 
                 if(paths[2].size() > 0){
                     load_pres(paths[2]);
+                    tabTogo = 2;
                 }
 
                 if(paths[3].size() > 0){
                     load_fund(paths[3]);
+                    tabTogo = 3;
                 }
+
+                ui->categoryTab->setCurrentIndex(tabTogo);
 
 
             } else {
