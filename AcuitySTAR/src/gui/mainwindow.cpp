@@ -762,18 +762,6 @@ void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWid
     QVector<QColor> colorList(pieSize);
     pieListWidget->clear();
 
-    //Selection ofFlat UI Colors
-    QColor flatColors[8] = {
-                QColor(44, 62, 80),
-                QColor(142, 68, 173),
-                QColor(41, 128, 185),
-                QColor(39, 174, 96),
-                QColor(22, 160, 133),
-                QColor(192, 57, 43),
-                QColor(211, 84, 0),
-                QColor(243, 156, 18)
-            };
-
     //Base Color randomly chosen from Flat UI
     QColor baseColor = flatColors[qrand() % 8];
 
@@ -804,13 +792,19 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     QCPBars *yLabels = new QCPBars(barChart->yAxis, barChart->xAxis);
     barChart->addPlottable(yLabels);
 
+    //Base Color randomly chosen from Flat UI
+    QColor baseColor = flatColors[qrand() % 8];
+
     // set names and colors:
     QPen pen;
     pen.setWidthF(1.2);
     yLabels->setName("Type");
-    pen.setColor(QColor(255, 131, 0));
+    //pen.setColor(QColor(255, 131, 0));
+    pen.setColor(QColor(baseColor));
     yLabels->setPen(pen);
-    yLabels->setBrush(QColor(255, 131, 0, 50));
+    QColor innerColor = QColor(baseColor);
+    innerColor.setAlpha(50);
+    yLabels->setBrush(innerColor);
 
     //get label list
     int barSize = (int) barChartList.size();
@@ -1940,5 +1934,3 @@ void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
 
 //Adding QTestClasses as Friends
 //friend Rectangle duplicate (const Rectangle&);
-
-
