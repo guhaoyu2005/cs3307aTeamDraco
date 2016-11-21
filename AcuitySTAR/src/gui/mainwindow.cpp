@@ -924,6 +924,8 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
     boxPlot->xAxis->grid()->setVisible(true);
     boxPlot->xAxis->setRange(0, boxSize+1);
 
+    statistical->setData(boxPlotList,boxPlotList,boxPlotList,boxPlotList,boxPlotList,boxPlotList);
+
     // setup Y Axis
     boxPlot->yAxis->setAutoTicks(true);
     boxPlot->yAxis->setRange(0,maxCount+(maxCount*.05));
