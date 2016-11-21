@@ -1,4 +1,5 @@
 #include "gui/mainwindow.h"
+#include "homepage.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -47,13 +48,16 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 
+    HomePage w;
+    w.show();
+
     //UI testing must occurs after QApplication initialized.
     if (test) {
         QTTestNewSortOrder *test_SortOrder = new QTTestNewSortOrder();
+        QTTestLoadFile *load_previous = new QTTestLoadFile();
         QTest::qExec(test_SortOrder);
+        //QTest::qExec(load_previous);
     }
-    MainWindow w;
-    w.show();
 
     return app.exec();
 }

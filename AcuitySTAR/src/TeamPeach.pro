@@ -9,13 +9,18 @@ QT                 += testlib
 CONFIG             += c++11
 CONFIG             += console
 
+QMAKE_MAC_SDK = macosx10.12
+
+
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = TeamPeach
 TEMPLATE = app
 
 DISTFILES += \
-    TeamPeach.pro.user
+    TeamPeach.pro.user \
+    testing/tc_4.1
 
 HEADERS += \
     gui/CustomSort.h \
@@ -37,7 +42,9 @@ HEADERS += \
     testing/test_1.1.h \
     testing/test_1.3.h \
     testing/test_3.1.h \
-    testing/test_2.1.h
+    testing/test_2.1.h \
+    testing/test_4.1.h \
+    gui/homepage.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -60,12 +67,15 @@ SOURCES += \
     testing/tc_1.1.cpp \
     testing/tc_1.3.cpp \
     testing/test_3.1.cpp \
-    testing/test_2.1.cpp
+    testing/test_2.1.cpp \
+    testing/tc_4.1.cpp \
+    gui/homepage.cpp
 
 FORMS += \
     gui/customsort.ui \
     gui/mainwindow.ui \
-    gui/ErrorEditDialog.ui
+    gui/ErrorEditDialog.ui \
+    gui/homepage.ui
 
 RESOURCES += \
     images.qrc

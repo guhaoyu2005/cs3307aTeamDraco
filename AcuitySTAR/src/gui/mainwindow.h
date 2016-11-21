@@ -21,6 +21,8 @@ class QTreeView;
 class QCustomPlot;
 class QPrinter;
 class QPainter;
+class QTTestLoadFile;
+class QTabWidget;
 
 namespace Ui {
     class MainWindow;
@@ -67,12 +69,16 @@ private slots:
 
     void on_teach_pie_button_toggled();
     void on_teach_bar_button_toggled();
+    void on_teach_stat_button_toggled();
     void on_pub_pie_button_toggled();
     void on_pub_bar_button_toggled();
+    void on_pub_stat_button_toggled();
     void on_pres_pie_button_toggled();
     void on_pres_bar_button_toggled();
+    void on_pres_stat_button_toggled();
     void on_fund_pie_button_toggled();
     void on_fund_bar_button_toggled();
+    void on_fund_stat_button_toggled();
 
     void on_teachTreeView_clicked(const QModelIndex &index);
     void on_pubTreeView_clicked(const QModelIndex &index);
@@ -145,6 +151,7 @@ private:
 
     void setupPieChart(PieChartWidget *pieChart, QListWidget *pieListWidget, std::vector<std::pair<std::string, double> > pieChartList);
     void setupBarChart(QCustomPlot *barChart, std::vector<std::pair<std::string, double> > barChartList);
+    void setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::string, double>> boxPlotList);
 
     bool handle_field_errors(std::vector<std::vector<std::string>*>& errors,
                              std::vector<std::string>& headers,
@@ -158,6 +165,10 @@ private:
 
     bool serialize_loaded_paths(QString save_path);
     bool load_serialized_paths(QString save_path);
+    friend class QTTestLoadFile;
+
+    bool checkTargetTabHasFileLoaded(TABS);
+    void loadFileAndSwitchToProperTab();
 };
 
 #endif // MAINWINDOW_H

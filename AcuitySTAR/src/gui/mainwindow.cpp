@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->showMaximized();
 
     // set up the logo
-    QPixmap logo(":/logo.png");
-    ui->logo_label->setPixmap(logo);
+   // QPixmap logo(":/logo.png");
+    //ui->logo_label->setPixmap(logo);
 
     // set up application icon
     QIcon icon(":/icon32.ico");
@@ -154,6 +154,103 @@ QString MainWindow::load_file() {
     }
 }
 
+bool MainWindow::checkTargetTabHasFileLoaded(TABS tabId) {
+    switch (tabId) {
+    case TEACH: {
+        return teachdb?true:false;
+    }
+    case PRESENTATIONS: {
+        return presdb?true:false;
+    }
+    case PUBLICATIONS: {
+        return pubdb?true:false;
+    }
+    case FUNDING: {
+        return funddb?true:false;
+    }
+    }
+}
+
+void MainWindow::loadFileAndSwitchToProperTab() {
+    QString filePath = load_file();
+    if (!filePath.isEmpty()) {
+        CSVReader reader;
+        reader.loadCSV(filePath.toStdString());
+        std::string errMsg;
+        if (reader.getFileType(errMsg) == CSVReader::CSVFileTypeBadFile) {
+            QMessageBox::StandardButton badFileMsgbox;
+            badFileMsgbox = QMessageBox::question(this, "Bad file", "Failed to load file or file format invalid. Retry?", QMessageBox::Yes|QMessageBox::No);
+            if (badFileMsgbox == QMessageBox::Yes) {
+                loadFileAndSwitchToProperTab();
+                return;
+            }
+            else {
+                //do nothing and return
+                return;
+            }
+        }
+        else {
+            switch (reader.getFileType(errMsg)) {
+                case CSVReader::CSVFileTypeTeaching: {
+                    if (checkTargetTabHasFileLoaded(TEACH)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    //continue
+                    load_teach(filePath);
+                    ui->categoryTab->setCurrentIndex(0);
+                    break;
+                }
+                case CSVReader::CSVFileTypePublications: {
+                    if (checkTargetTabHasFileLoaded(PUBLICATIONS)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_pub(filePath);
+                    ui->categoryTab->setCurrentIndex(1);
+                    break;
+                }
+                case CSVReader::CSVFileTypePresentations: {
+                    if (checkTargetTabHasFileLoaded(PRESENTATIONS)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_pres(filePath);
+                    ui->categoryTab->setCurrentIndex(2);
+                    break;
+                }
+                case CSVReader::CSVFileTypeGrants: {
+                    if (checkTargetTabHasFileLoaded(FUNDING)) {
+                        QMessageBox::StandardButton msgbox;
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        if (msgbox == QMessageBox::No) {
+                            //do nothing and return
+                            return;
+                        }
+                    }
+                    load_fund(filePath);
+                    ui->categoryTab->setCurrentIndex(3);
+                    break;
+                }
+            }
+        }
+    }
+    else {
+        //do nothing for now if didn't select any
+    }
+}
 void MainWindow::refresh(int tabIndex) {
     // if we've loaded in a file, update that data
     switch (tabIndex) {
@@ -754,6 +851,77 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     yLabels->setData(ticks, count);
 }
 
+//set up for the Box Plot (added new chart)
+void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::string, double>> boxPlotList){
+    QCPStatisticalBox *statistical = new QCPStatisticalBox(boxPlot->xAxis, boxPlot->yAxis);
+    QBrush boxBrush(QColor(60, 60, 255, 100));
+    boxBrush.setStyle(Qt::Dense6Pattern); // make it look oldschool
+    statistical->setBrush(boxBrush);
+
+    //setData(double key, double minimum, double lowerQuartile, double median, double upperQuartile, double maximum)
+    int boxSize = (int) boxPlotList.size();
+    double maxCount = 0;
+    double scaledCount;
+    QVector<double> ticks;
+    QVector<QString> xlabels;
+    QVector<double> count;
+    for (int i = 0; i < boxSize; i++){
+        ticks << (i+1);
+        //getting x labels
+        xlabels << QString::fromStdString(boxPlotList[i].first);
+        // setting the data with values
+        if (boxPlotList[i].second>1000000){
+            scaledCount = boxPlotList[i].second/1000000;
+        } else if (boxPlotList[i].second>1000){
+            scaledCount = boxPlotList[i].second/1000;
+        } else{
+            scaledCount = boxPlotList[i].second;
+        }
+        count <<scaledCount;
+
+        if (maxCount < boxPlotList[i].second)
+            maxCount = boxPlotList[i].second;
+    }
+
+    //add label list to x axis labels
+    if(maxCount>1000000){
+        maxCount = maxCount/1000000;
+        boxPlot->yAxis->setLabel("Total (in Millions)");
+    }else if (maxCount>1000){
+        maxCount = maxCount/1000;
+        boxPlot->yAxis->setLabel("Total (in Thousands)");
+    }else{
+        boxPlot->yAxis->setLabel("Total");
+    }
+
+
+    //setup X Axis
+    boxPlot->xAxis->setAutoTicks(false);
+    boxPlot->xAxis->setAutoTickLabels(false);
+    boxPlot->xAxis->setTickVector(ticks);
+    boxPlot->xAxis->setTickVectorLabels(xlabels);
+    boxPlot->xAxis->setTickLabelPadding(1);
+    boxPlot->xAxis->setSubTickCount(0);
+    boxPlot->xAxis->setTickLength(0, 1);
+    boxPlot->xAxis->grid()->setVisible(true);
+    boxPlot->xAxis->setRange(0, boxSize+1);
+
+    // setup Y Axis
+    boxPlot->yAxis->setAutoTicks(true);
+    boxPlot->yAxis->setRange(0,maxCount+(maxCount*.05));
+    boxPlot->yAxis->setAutoTickLabels(true);
+    boxPlot->yAxis->setAutoTickStep(true);
+    boxPlot->yAxis->grid()->setSubGridVisible(true);
+
+    /*
+    // prepare axes:
+    boxPlot->rescaleAxes();
+    boxPlot->xAxis->setTickVectorLabels(xlabels);
+    //boxPlot->xAxis->scaleRange(1.7, boxPlot->xAxis->range().center());
+    boxPlot->yAxis->setRange(0, 7);*/
+    boxPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+}
 
 void MainWindow::on_teach_new_sort_clicked() {
     if (teachdb != NULL) {
@@ -955,21 +1123,29 @@ void MainWindow::on_fund_delete_sort_clicked() {
     }
 }
 
-void MainWindow::on_teach_bar_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_teach_pie_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pub_bar_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_teach_bar_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(2);}
+void MainWindow::on_teach_pie_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_teach_stat_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(0);}
+void MainWindow::on_pub_bar_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_pub_pie_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pres_bar_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pub_stat_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pres_bar_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_pres_pie_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_pres_stat_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(1);}
+void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(2);}
 void MainWindow::on_fund_pie_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(0);}
+void MainWindow::on_fund_stat_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(1);}
 
 void MainWindow::on_teach_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_teach(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
+
+
 
 bool MainWindow::load_teach(QString path, bool multi_file) {
     if (!checkFile(TEACH, path)) {
@@ -981,6 +1157,7 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         ui->teach_filter_to->setEnabled(true);
         ui->teach_pie_button->setEnabled(true);
         ui->teach_bar_button->setEnabled(true);
+        ui->teach_stat_button->setEnabled(true);
         ui->teach_to_label->setEnabled(true);
         ui->teach_sort_label->setEnabled(true);
         ui->teach_filter->setEnabled(true);
@@ -1019,10 +1196,12 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
 }
 
 void MainWindow::on_pub_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_pub(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_pub(QString path, bool multi_file) {
@@ -1035,6 +1214,7 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         ui->pub_filter_to->setEnabled(true);
         ui->pub_pie_button->setEnabled(true);
         ui->pub_bar_button->setEnabled(true);
+        ui->pub_stat_button->setEnabled(true);
         ui->pub_to_label->setEnabled(true);
         ui->pub_sort_label->setEnabled(true);
         ui->pub_filter->setEnabled(true);
@@ -1073,10 +1253,12 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
 }
 
 void MainWindow::on_pres_load_file_clicked() {
+    /*
     QString path = load_file();
     if (!path.isEmpty()) {
         load_pres(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_pres(QString path, bool multi_file) {
@@ -1089,6 +1271,7 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         ui->pres_filter_to->setEnabled(true);
         ui->pres_pie_button->setEnabled(true);
         ui->pres_bar_button->setEnabled(true);
+        ui->pres_stat_button->setEnabled(true);
         ui->pres_to_label->setEnabled(true);
         ui->pres_sort_label->setEnabled(true);
         ui->pres_filter->setEnabled(true);
@@ -1127,10 +1310,11 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
 }
 
 void MainWindow::on_fund_load_file_clicked() {
-    QString path = load_file();
+    /*QString path = load_file();
     if (!path.isEmpty()) {
         load_fund(path);
-    }
+    }*/
+    loadFileAndSwitchToProperTab();
 }
 
 bool MainWindow::load_fund(QString path, bool multi_file) {
@@ -1143,6 +1327,7 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         ui->fund_filter_to->setEnabled(true);
         ui->fund_pie_button->setEnabled(true);
         ui->fund_bar_button->setEnabled(true);
+        ui->fund_stat_button->setEnabled(true);
         ui->fund_to_label->setEnabled(true);
         ui->fund_sort_label->setEnabled(true);
         ui->fund_filter->setEnabled(true);
@@ -1363,6 +1548,7 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
             ui->teachBarChart->replot();
 
             setupPieChart(ui->teachPieChart, ui->teachPieList, chartList);
+            setupBoxPlot(ui->teachBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->teachGraphTitle->setText("Total " + clickedName + " Teaching by " +
@@ -1413,6 +1599,7 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
             ui->pubBarChart->replot();
 
             setupPieChart(ui->pubPieChart, ui->pubPieList, chartList);
+            setupBoxPlot(ui->pubBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
@@ -1463,6 +1650,7 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
             ui->presBarChart->replot();
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
+            setupBoxPlot(ui->presBoxPlot, chartList);
 
             if (parentsList.size()>1) {
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
@@ -1510,6 +1698,7 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
                 ui->fundBarChart->replot();
 
                 setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
+                setupBoxPlot(ui->fundBoxPlot, chartList);
 
                 if (parentsList.size()>1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
@@ -1575,10 +1764,28 @@ void MainWindow::on_teachExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->teachChartFrame->setFixedHeight(515);
+        ui->teachChartFrame->setFixedWidth(762);
         ui->teachChartFrame->render(&painter);
+
+        //setting back the size
+        ui->teachChartFrame->setFixedHeight(preSize.height());
+         ui->teachChartFrame->setFixedHeight(preSize.width());
         /* Another option for bar chart since it is QCustom plot
         if (ui->teach_bar_button->isChecked()) {
             ui->teachBarChart->savePdf(fileName);
@@ -1595,10 +1802,28 @@ void MainWindow::on_fundExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->fundChartFrame->setFixedHeight(515);
+        ui->fundChartFrame->setFixedWidth(762);
         ui->fundChartFrame->render(&painter);
+
+        //setting back the size
+        ui->fundChartFrame->setFixedHeight(preSize.height());
+         ui->fundChartFrame->setFixedHeight(preSize.width());
     }
 }
 
@@ -1610,10 +1835,28 @@ void MainWindow::on_presExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->presChartFrame->setFixedHeight(515);
+        ui->presChartFrame->setFixedWidth(762);
         ui->presChartFrame->render(&painter);
+
+        //setting back the size
+        ui->presChartFrame->setFixedHeight(preSize.height());
+         ui->presChartFrame->setFixedHeight(preSize.width());
     }
 }
 
@@ -1625,10 +1868,28 @@ void MainWindow::on_pubExportButton_clicked()
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
-        QPainter painter;
-        painter.begin(&writer);
-        painter.scale(10.0, 10.0);
+        writer.setPageSize(QPagedPaintDevice::A4);
+        writer.setPageMargins(QMargins(40, 40, 40, 40));
+
+        QPainter painter(&writer);
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("Times", 20));
+
+        QDate date = QDate::currentDate();
+//        QString currentdate =  date.toString("dd.MM.yyyy");
+        QString currentdate =  date.toString("yyyy.MM.dd");
+        currentdate = "Exported on " + currentdate;
+        QRect r = painter.viewport();
+        painter.drawText(r, Qt::AlignBottom, currentdate);
+        painter.scale(15.0, 15.0);
+        QSize preSize = ui->teachChartFrame->size();
+        ui->pubChartFrame->setFixedHeight(515);
+        ui->pubChartFrame->setFixedWidth(762);
         ui->pubChartFrame->render(&painter);
+
+        //setting back the size
+        ui->pubChartFrame->setFixedHeight(preSize.height());
+         ui->pubChartFrame->setFixedHeight(preSize.width());
     }
 }
 
