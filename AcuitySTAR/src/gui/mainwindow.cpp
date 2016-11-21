@@ -1373,21 +1373,28 @@ bool MainWindow::load_serialized_paths(QString path) {
             if (userReply == QMessageBox::Yes) {
                 qDebug() << "Loading Previous Files";
 
+                int tabTogo = 0;
                 if(paths[0].size() > 0){
                     load_teach(paths[0]);
+                    tabTogo = 0;
                 }
 
                 if(paths[1].size() > 0){
                     load_pub(paths[1]);
+                    tabTogo = 1;
                 }
 
                 if(paths[2].size() > 0){
                     load_pres(paths[2]);
+                    tabTogo = 2;
                 }
 
                 if(paths[3].size() > 0){
                     load_fund(paths[3]);
+                    tabTogo = 3;
                 }
+
+                ui->categoryTab->setCurrentIndex(tabTogo);
 
 
             } else {
