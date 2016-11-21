@@ -901,6 +901,8 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
         ticks << (i+1);
         //getting x labels
         xlabels << QString::fromStdString(boxPlotList[i].first);
+        statistical->setData(boxPlotList[i].second,boxPlotList[i].second, boxPlotList[i].second,
+                             boxPlotList[i].second,boxPlotList[i].second,boxPlotList[i].second);
         // setting the data with values
         if (boxPlotList[i].second>1000000){
             scaledCount = boxPlotList[i].second/1000000;
@@ -937,8 +939,6 @@ void MainWindow::setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::
     boxPlot->xAxis->setTickLength(0, 1);
     boxPlot->xAxis->grid()->setVisible(true);
     boxPlot->xAxis->setRange(0, boxSize+1);
-
-    statistical->setData(boxPlotList,boxPlotList,boxPlotList,boxPlotList,boxPlotList,boxPlotList);
 
     // setup Y Axis
     boxPlot->yAxis->setAutoTicks(true);
