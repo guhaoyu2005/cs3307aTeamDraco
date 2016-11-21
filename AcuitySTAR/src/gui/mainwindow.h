@@ -69,12 +69,16 @@ private slots:
 
     void on_teach_pie_button_toggled();
     void on_teach_bar_button_toggled();
+    void on_teach_stat_button_toggled();
     void on_pub_pie_button_toggled();
     void on_pub_bar_button_toggled();
+    void on_pub_stat_button_toggled();
     void on_pres_pie_button_toggled();
     void on_pres_bar_button_toggled();
+    void on_pres_stat_button_toggled();
     void on_fund_pie_button_toggled();
     void on_fund_bar_button_toggled();
+    void on_fund_stat_button_toggled();
 
     void on_teachTreeView_clicked(const QModelIndex &index);
     void on_pubTreeView_clicked(const QModelIndex &index);
@@ -108,12 +112,28 @@ private slots:
 
     void on_pubExportButton_clicked();
 
+    void on_getStartedButton_clicked();
+
+    void on_stackedWidget_destroyed();
+
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
 
     enum TABS {
         TEACH, PUBLICATIONS, PRESENTATIONS, FUNDING
     };
+
+    //Selection ofFlat UI Colors
+    QColor flatColors[8] = {
+                QColor(44, 62, 80),
+                QColor(142, 68, 173),
+                QColor(41, 128, 185),
+                QColor(39, 174, 96),
+                QColor(22, 160, 133),
+                QColor(192, 57, 43),
+                QColor(211, 84, 0),
+                QColor(243, 156, 18)
+            };
 
     struct field_error;
 
