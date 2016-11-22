@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../database/CSVReader.h"
+#include <QTableWidgetItem>
 
 class QAbstractButton;
 
@@ -27,6 +28,12 @@ private slots:
      void on_save_clicked();
      void on_cancel_clicked();
 
+     void on_FindNextBtn_clicked();
+
+     void on_FindPrevBtn_clicked();
+
+     void on_tableWidget_itemChanged(QTableWidgetItem *item);
+
 private:
      std::vector<std::string> GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date"};
      std::vector<std::string> PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
@@ -40,6 +47,11 @@ private:
     std::string path;
     CSVReader::CSVFileType type;
     Ui::ErrorEditDialog *ui;
+
+    int ErrorCounter;
+    int CurrErrorLoc;
+    int FixedErrorCounter;
+    std::vector<int> ErrorLoc;
 
     std::vector<std::vector<std::string>> data;
     std::vector<std::string> header;

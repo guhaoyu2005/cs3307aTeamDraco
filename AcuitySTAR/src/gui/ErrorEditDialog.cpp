@@ -9,6 +9,7 @@
 #include <QColor>
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QItemSelectionModel>
 
 bool ErrorEditDialog::isManfields(CSVReader::CSVFileType fileType, std::string cmpString) {
     switch (fileType) {
@@ -58,6 +59,8 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
     ui(new Ui::ErrorEditDialog)
 {   
     ui->setupUi(this);
+    ErrorCounter = 0;
+    FixedErrorCounter = 0;
 
     QStringList listHeaders;
 
@@ -70,6 +73,9 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
     }
     data.clear();
     data = reader.getData();
+    ErrorLoc.clear();
+
+    ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
     ui->tableWidget->setRowCount((int) data.size());
     ui->tableWidget->setColumnCount((int) header.size());
@@ -90,13 +96,17 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
 
             if (isManfields(type, header[col])) {
                 if ((it)->at(col).compare("") == 0) {
+                    ErrorCounter++;
                     item->setBackground(brushRed);
+                    ErrorLoc.push_back(row*(int)header.size()+col);
                 }
             }
             ui->tableWidget->setItem(row, col, item);
         }
         row++;
     }
+
+    ui->ErrorDisplayLbl->setText("Error Fixed: "+ QString::number(FixedErrorCounter) +" Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
 }
 
 //Clean up allocated memory for the table items
@@ -263,4 +273,80 @@ void ErrorEditDialog::on_save_clicked()
 void ErrorEditDialog::on_cancel_clicked()
 {
     reject();
+}
+
+void ErrorEditDialog::on_FindNextBtn_clicked() {
+    if (ui->tableWidget->selectedItems().count()>0) {
+        int currLoc = ui->tableWidget->selectedItems()[0]->row()*header.size()+ui->tableWidget->selectedItems()[0]->column();
+        int nextError = -1;
+        for (int i=0;i<ErrorLoc.size();i++) {
+            if (ErrorLoc[i]>currLoc) {
+                nextError = ErrorLoc[i];
+                break;
+            }
+        }
+        for (int i=0;i<ui->tableWidget->selectedItems().count();i++) {
+            ui->tableWidget->selectedItems()[i]->setSelected(false);
+        }
+        if (nextError == -1) {
+            //select the first one
+            ui->tableWidget->setCurrentCell(ErrorLoc[0]/header.size(), ErrorLoc[0]%header.size());
+            //ui->tableWidget->itemAt(ErrorLoc[0]/header.size(), ErrorLoc[0]%header.size())->setSelected(true);
+            //ui->tableWidget->scrollToItem(ui->tableWidget->itemAt(ErrorLoc[0]/header.size(), ErrorLoc[0]%header.size()));
+        }
+        else {
+            ui->tableWidget->setCurrentCell(nextError/header.size(), nextError%header.size());
+            //ui->tableWidget->itemAt(nextError/header.size(), nextError%header.size())->setSelected(true);
+            //ui->tableWidget->scrollToItem(ui->tableWidget->itemAt(nextError/header.size(), nextError%header.size()));
+        }
+    }
+    else {
+        QMessageBox::critical(this, "Error", "Please select a cell first!");
+    }
+}
+
+void ErrorEditDialog::on_FindPrevBtn_clicked() {
+    if (ui->tableWidget->selectedItems().count()>0) {
+        int currLoc = ui->tableWidget->selectedItems()[0]->row()*header.size()+ui->tableWidget->selectedItems()[0]->column();
+        int nextError = -1;
+        for (int i=ErrorLoc.size()-1;i>=0;i--) {
+            if (ErrorLoc[i]<currLoc) {
+                nextError = ErrorLoc[i];
+                break;
+            }
+        }
+        for (int i=0;i<ui->tableWidget->selectedItems().count();i++) {
+            ui->tableWidget->selectedItems()[i]->setSelected(false);
+        }
+        //printf("BACK: %d", nextError);
+        if (nextError == -1) {
+            //select the last one
+            ui->tableWidget->setCurrentCell(ErrorLoc[ErrorLoc.size()-1]/header.size(), ErrorLoc[ErrorLoc.size()-1]%header.size());
+        }
+        else {
+            ui->tableWidget->setCurrentCell(nextError/header.size(), nextError%header.size());
+        }
+
+    }
+    else {
+        QMessageBox::critical(this, "Error", "Please select a cell first!");
+    }
+
+}
+
+void ErrorEditDialog::on_tableWidget_itemChanged(QTableWidgetItem *item)
+{
+    int curr = item->row()*header.size()+item->column();
+    for (int i=ErrorLoc.size()-1;i>=0;i--) {
+        if (ErrorLoc[i]==curr) {
+            if (item->text().compare("") == 0) {
+
+            }
+            else {
+                FixedErrorCounter++;
+                ui->ErrorDisplayLbl->setText("Error Fixed: "+ QString::number(FixedErrorCounter) +" Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
+            }
+            break;
+        }
+    }
 }
