@@ -9,7 +9,7 @@ QT                 += testlib
 CONFIG             += c++11
 CONFIG             += console
 
-QMAKE_MAC_SDK = macosx10.12
+QMAKE_MAC_SDK = macosx10.11
 
 
 

@@ -70,15 +70,19 @@ private slots:
     void on_teach_pie_button_toggled();
     void on_teach_bar_button_toggled();
     void on_teach_stat_button_toggled();
+    void on_teach_line_button_toggled();
     void on_pub_pie_button_toggled();
     void on_pub_bar_button_toggled();
     void on_pub_stat_button_toggled();
+    void on_pub_line_button_toggled();
     void on_pres_pie_button_toggled();
     void on_pres_bar_button_toggled();
     void on_pres_stat_button_toggled();
+    void on_pres_line_button_toggled();
     void on_fund_pie_button_toggled();
     void on_fund_bar_button_toggled();
     void on_fund_stat_button_toggled();
+    void on_fund_line_button_toggled();
 
     void on_teachTreeView_clicked(const QModelIndex &index);
     void on_pubTreeView_clicked(const QModelIndex &index);
@@ -115,6 +119,12 @@ private slots:
     //void on_getStartedButton_clicked();
 
     //void on_stackedWidget_destroyed();
+
+//    void on_teach_stat_button_clicked();
+
+//    void on_teach_stat_button_clicked(bool checked);
+
+//    void on_teach_stat_button_toggled(bool checked);
 
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
@@ -168,6 +178,8 @@ private:
     void setupPieChart(PieChartWidget *pieChart, QListWidget *pieListWidget, std::vector<std::pair<std::string, double> > pieChartList);
     void setupBarChart(QCustomPlot *barChart, std::vector<std::pair<std::string, double> > barChartList);
     void setupBoxPlot(QCustomPlot *boxPlot, std::vector<std::pair <std::string, double>> boxPlotList);
+    void setupLineChart(QCustomPlot *lineChart, std::vector<std::pair <std::string, double>> lineChartList);
+
     void median(std::vector<double> &data, int low, int high, double &median, int &newLow, int &newHigh);
 
     bool handle_field_errors(std::vector<std::vector<std::string>*>& errors,
