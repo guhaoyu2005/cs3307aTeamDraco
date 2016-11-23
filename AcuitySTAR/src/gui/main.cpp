@@ -1,5 +1,6 @@
 #include "gui/mainwindow.h"
 #include "homepage.h"
+#include "testing/tc_8_1.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -14,13 +15,13 @@ int main(int argc, char *argv[]) {
         QTTestCSVReader *test_csv = new QTTestCSVReader();
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
         QTTestTreeModel *test_tree = new QTTestTreeModel();
-
+        QTTestCSVWriter *test_writer = new QTTestCSVWriter();
 
         //Run Tests
         QTest::qExec(test_csv);
         QTest::qExec(test_tree);
         QTest::qExec(test_MainWindow);
-
+        QTest::qExec(test_writer);
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;
