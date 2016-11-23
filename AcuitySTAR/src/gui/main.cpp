@@ -1,21 +1,27 @@
 #include "gui/mainwindow.h"
 #include "homepage.h"
+#include "testing/tc_8_1.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    int test = 1;   /* test on = 1 off = 0 */
+    int test = 0;   /* test on = 1 off = 0 */
     if (test) {
         //Initialize Test Classes
         QTTestCSVReader *test_csv = new QTTestCSVReader();
         QTTestMainWindow *test_MainWindow = new QTTestMainWindow();
         QTTestTreeModel *test_tree = new QTTestTreeModel();
-
+        QTTestCSVWriter *test_writer = new QTTestCSVWriter();
 
         //Run Tests
         QTest::qExec(test_csv);
         QTest::qExec(test_tree);
         QTest::qExec(test_MainWindow);
-
+        QTest::qExec(test_writer);
 
         //Old CSV Test Now implemented as QTTestCSVReader
 //        TestCSVReader testReader;
@@ -45,7 +51,9 @@ int main(int argc, char *argv[]) {
 //        else cout << "TEST_08 FAILED !\n";
 //        testReader.CSV_READER_TEST_ALL();
     }
-
+#ifdef _WIN32
+    FreeConsole();
+#endif
     QApplication app(argc, argv);
 
     HomePage w;
