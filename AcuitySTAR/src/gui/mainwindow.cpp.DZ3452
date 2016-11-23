@@ -92,7 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Load Serialized States - Team Draco 2016
     this->load_serialized_paths(PREVIOUS_FILES_SAVE);
-    this->load_serialized_models(MODELS_SERIALIZATION);
+
 }
 
 MainWindow::~MainWindow() {
@@ -1545,11 +1545,7 @@ bool MainWindow::load_serialized_models(QString path){
 
     // read the data serialized from the file
     QDataStream in(&file);
-    QString blah;
-    QVector<QString> qteachSortOrder;
 
-    in >> blah >> qteachSortOrder;
-    qDebug() << "Deserialized Stuff" << blah << qteachSortOrder.size();
     // extract sort fields
 //    in >> this->teachdb >> this->teachPath >> this->teachTree;
 //    in >> this->pubdb >> this->pubPath >> this->pubTree;
@@ -1578,12 +1574,9 @@ bool MainWindow::serialize_models(QString path){
     // serialize the models
     QVector<QString> qteachSortOrder;
     for(uint i=0; i<teachSortOrder.size(); i++){
-        qDebug() << "appending shit";
         qteachSortOrder.append(QString::fromStdString(teachSortOrder[i]));
     }
-
-    qDebug() << qteachSortOrder.size();
-    out << QString("Data") << qteachSortOrder;
+    out << qteachSortOrder;
 //    out << this->teachdb; << this->teachPath << this->teachTree
 //        << this->pubdb << this->pubPath << this->pubTree
 //        << this->presdb << this->presPath << this->presTree
