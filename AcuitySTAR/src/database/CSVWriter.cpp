@@ -5,13 +5,15 @@
 #include <QDebug>
 
 using namespace std;
-
+/*
+ * FUNCTION FOR SAVING FROM THE ERRONEOUS ENTRIES EDITOR TO CSV --> Also saves backup version
+ */
 CSVWriter::CSVWriter(){
 
 }
 
 /*
- * FUNCTION FOR SURVIVNG THIS SHIT
+ * FUNCTION FOR SAVING
  */
 bool CSVWriter::writeToCSVDueToShitCodeForGrantShits(std::string path, vector<string> header, vector<vector<string>> data) {
     createBackup(path);
