@@ -1641,7 +1641,7 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="pres_line_page">
-                 <widget class="QCustomPlot" name="presLibeGraph" native="true">
+                 <widget class="QCustomPlot" name="presLineGraph" native="true">
                   <property name="geometry">
                    <rect>
                     <x>-10</x>
@@ -1649,6 +1649,12 @@ p, li { white-space: pre-wrap; }
                     <width>551</width>
                     <height>801</height>
                    </rect>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
                  </widget>
                 </widget>

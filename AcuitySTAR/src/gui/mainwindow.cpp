@@ -1845,7 +1845,7 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
             setupBoxPlot(ui->presBoxPlot, chartList);
-            setupLineChart(ui->presLibeGraph,chartList);
+            setupLineChart(ui->presLineGraph,chartList);
 
             if (parentsList.size()>1) {
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
