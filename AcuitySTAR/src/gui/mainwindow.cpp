@@ -1981,7 +1981,7 @@ void MainWindow::on_teachExportButton_clicked()
 
         //setting back the size
         ui->teachChartFrame->setFixedHeight(preSize.height());
-         ui->teachChartFrame->setFixedHeight(preSize.width());
+         ui->teachChartFrame->setFixedWidth(preSize.width());
         /* Another option for bar chart since it is QCustom plot
         if (ui->teach_bar_button->isChecked()) {
             ui->teachBarChart->savePdf(fileName);
@@ -2019,7 +2019,7 @@ void MainWindow::on_fundExportButton_clicked()
 
         //setting back the size
         ui->fundChartFrame->setFixedHeight(preSize.height());
-         ui->fundChartFrame->setFixedHeight(preSize.width());
+         ui->fundChartFrame->setFixedWidth(preSize.width());
     }
 }
 
@@ -2052,7 +2052,7 @@ void MainWindow::on_presExportButton_clicked()
 
         //setting back the size
         ui->presChartFrame->setFixedHeight(preSize.height());
-         ui->presChartFrame->setFixedHeight(preSize.width());
+         ui->presChartFrame->setFixedWidth(preSize.width());
     }
 }
 
@@ -2082,10 +2082,9 @@ void MainWindow::on_pubExportButton_clicked()
         ui->pubChartFrame->setFixedHeight(515);
         ui->pubChartFrame->setFixedWidth(762);
         ui->pubChartFrame->render(&painter);
-
         //setting back the size
         ui->pubChartFrame->setFixedHeight(preSize.height());
-         ui->pubChartFrame->setFixedHeight(preSize.width());
+        ui->pubChartFrame->setFixedWidth(preSize.width());
     }
 }
 
