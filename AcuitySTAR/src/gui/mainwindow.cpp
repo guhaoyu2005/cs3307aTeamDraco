@@ -194,7 +194,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypeTeaching: {
                     if (checkTargetTabHasFileLoaded(TEACH)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -208,7 +208,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypePublications: {
                     if (checkTargetTabHasFileLoaded(PUBLICATIONS)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -221,7 +221,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypePresentations: {
                     if (checkTargetTabHasFileLoaded(PRESENTATIONS)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -234,7 +234,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypeGrants: {
                     if (checkTargetTabHasFileLoaded(FUNDING)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;

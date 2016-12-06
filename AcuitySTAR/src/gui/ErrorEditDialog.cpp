@@ -106,7 +106,7 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
         row++;
     }
 
-    ui->ErrorDisplayLbl->setText("Error Fixed: "+ QString::number(FixedErrorCounter) +" Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
+    ui->ErrorDisplayLbl->setText("Errors Fixed: "+ QString::number(FixedErrorCounter) +"\t Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
 }
 
 //Clean up allocated memory for the table items
