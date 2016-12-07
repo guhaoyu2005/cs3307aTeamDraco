@@ -83,3 +83,5 @@ FORMS += \
 
 RESOURCES += \
     images.qrc
+    
+win32: RC_ICONS = icon32.ico
