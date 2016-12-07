@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ bool CSVWriter::writeToCSVDueToShitCodeForGrantShits(std::string path, vector<st
 
 
 bool CSVWriter::writeToCSV(std::string path, vector<string> header, vector<vector<string>> data) {
-    createBackup(path);
+    //createBackup(path);
 
     ofstream out;
     out.open(path);
@@ -72,11 +73,12 @@ bool CSVWriter::writeToCSV(std::string path, vector<string> header, vector<vecto
     out<<endl;
     out.close();
 
-    removeBackup(path);
+    //removeBackup(path);
     return true;
 }
 
 bool CSVWriter::isExistingBackup(std::string path) {
+    return false;
     stringstream ss;
     ss<<path<<".bak";
     string bakPath = ss.str();
