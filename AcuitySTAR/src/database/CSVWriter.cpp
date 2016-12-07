@@ -18,8 +18,8 @@ bool CSVWriter::writeToCSVDueToShitCodeForGrantShits(std::string path, vector<st
 
     ofstream out;
     out.open(path);
-    for (int i=0;i<header.size()-1;i++) {
-        out<<header[i]<<(i==header.size()-1? "":",");
+    for (int i=0;i<header.size();i++) {
+        out<<header[i]<<(i==header.size()? "":",");
     }
 
     int whoWannaEatShits[] = {1, 4, 18, 19, 21, 26, 27, 37};
@@ -56,8 +56,8 @@ bool CSVWriter::writeToCSV(std::string path, vector<string> header, vector<vecto
 
     ofstream out;
     out.open(path);
-    for (int i=0;i<header.size()-1;i++) {
-        out<<header[i]<<(i==header.size()-1? "":",");
+    for (int i=0;i<header.size();i++) {
+        out<<header[i]<<(i==header.size()? "":",");
     }
     for (int i=0;i<data.size();i++) {
         out<<endl;
