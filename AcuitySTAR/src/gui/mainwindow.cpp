@@ -585,7 +585,7 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         break;
     case PUBLICATIONS:
         // specify default sort order
-        defaultOrder << "Division" << "Member Name" << "Program";
+        defaultOrder << "Division" << "Member Name" << "Type" << "Role" << "Title";
 
         // add default list to member variable
         allPubOrders << defaultOrder;
