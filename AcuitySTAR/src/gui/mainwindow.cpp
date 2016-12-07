@@ -1753,8 +1753,10 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
                 }
                 if (!foundSameOne)
                     chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
-                selectedNum++;
+
             }
+
+            selectedNum++;
 
             if (!chartList.empty()) {
                 ui->teachBarChart->clearPlottables();
@@ -1829,8 +1831,10 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
                 }
                 if (!foundSameOne)
                     chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
-                selectedNum++;
+
             }
+
+            selectedNum++;
 
             if (!chartList.empty()) {
                 ui->pubBarChart->clearPlottables();
@@ -1866,104 +1870,163 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
 }
 
 void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
-    QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==presClickedName || index.column()!=0) { return;}
+    std::vector<std::pair <std::string, double>> chartList;
+    int selectedNum = 0;
 
-    std::vector<std::string> parentsList;
-    QModelIndex current = index;
-    QString name;
-    while (true) {
-        name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
-            auto it = parentsList.begin();
-            it = parentsList.insert(it, name.toStdString());
-        } else {
-            break;
-        }
-        current = current.parent();
-    }
+    QModelIndexList iList = ui->presTreeView->selectionModel()->selectedIndexes();
+    for (int x=0;x<iList.size();x++) {
+        QModelIndex ii = iList[x];
 
-    if (parentsList.size()!=presSortOrder.size()) {
-        presClickedName = clickedName;
-        std::vector<std::string> sortOrder(presSortOrder.begin(), presSortOrder.begin()+parentsList.size()+1);
-        std::vector<std::pair <std::string, int>> list =
-                presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
-        std::vector<std::pair <std::string, double>> chartList;
-        for (int i = 0; i < (int) list.size(); i++) {
-            chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
-        }
+        QString clickedName = ii.data(Qt::DisplayRole).toString();
+        if (ii.column()!=0) { continue;}
 
-        if (!chartList.empty()) {
-            ui->presBarChart->clearPlottables();
-            setupBarChart(ui->presBarChart, chartList);
-            ui->presBarChart->replot();
-
-            setupPieChart(ui->presPieChart, ui->presPieList, chartList);
-            setupBoxPlot(ui->presBoxPlot, chartList);
-            setupLineChart(ui->presLibeGraph,chartList);
-
-            if (parentsList.size()>1) {
-                ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
-                                            QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+        std::vector<std::string> parentsList;
+        QModelIndex current = ii;
+        QString name;
+        while (true) {
+            name = current.data(Qt::DisplayRole).toString();
+            if(name!="") {
+                auto it = parentsList.begin();
+                it = parentsList.insert(it, name.toStdString());
             } else {
-                ui->presGraphTitle->setText("Total Presentations by " + QString::fromStdString(parentsList[0]));
+                break;
             }
-            ui->pres_graph_stackedWidget->show();
+            current = current.parent();
         }
-    } else {
-        ui->pres_graph_stackedWidget->hide();
-        ui->presGraphTitle->clear();
-        presClickedName.clear();
+
+        if (parentsList.size()!=presSortOrder.size()) {
+            presClickedName = clickedName;
+            std::vector<std::string> sortOrder(presSortOrder.begin(), presSortOrder.begin()+parentsList.size()+1);
+            std::vector<std::pair <std::string, int>> list =
+                    presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
+
+            bool foundSameOne = 0;
+            for (int i = 0; i < (int) list.size(); i++) {
+                for (int j=0;j<(int)chartList.size();j++) {
+                    if (chartList[j].first == list[i].first) {
+                        foundSameOne = 1;
+                        chartList[j].second += static_cast<double>(list[i].second);
+                        break;
+                    }
+                }
+                if (!foundSameOne)
+                    chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
+
+            }
+
+            selectedNum++;
+
+            if (!chartList.empty()) {
+                ui->presBarChart->clearPlottables();
+                setupBarChart(ui->presBarChart, chartList);
+                ui->presBarChart->replot();
+
+                setupPieChart(ui->presPieChart, ui->presPieList, chartList);
+                setupBoxPlot(ui->presBoxPlot, chartList);
+                setupLineChart(ui->presLibeGraph,chartList);
+
+                if (selectedNum > 1) {
+                    ui->presGraphTitle->setText("Multiple Selection.");
+                }
+                else {
+                    if (parentsList.size()>1) {
+                        ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
+                                                    QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                    } else {
+                        ui->presGraphTitle->setText("Total Presentations by " + QString::fromStdString(parentsList[0]));
+                    }
+                }
+
+                ui->pres_graph_stackedWidget->show();
+            }
+        } else {
+            ui->pres_graph_stackedWidget->hide();
+            ui->presGraphTitle->clear();
+            presClickedName.clear();
+        }
+
     }
+
 }
 
 void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
-    QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==fundClickedName || index.column()!=0) { return;}
+    std::vector<std::pair <std::string, double>> chartList;
+    int selectedNum = 0;
 
-    std::vector<std::string> parentsList;
-    QModelIndex current = index;
-    QString name;
-    while (true) {
-        name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
-            auto it = parentsList.begin();
-            it = parentsList.insert(it, name.toStdString());
-        } else {
-            break;
-        }
-        current = current.parent();
-    }
+    QModelIndexList iList = ui->fundTreeView->selectionModel()->selectedIndexes();
+    for (int x=0;x<iList.size();x++) {
+        QModelIndex ii = iList[x];
 
-    if (parentsList.size()!=fundSortOrder.size()) {
-        if (clickedName != fundClickedName) {
-            fundClickedName = clickedName;
-            std::vector<std::string> sortOrder(fundSortOrder.begin(), fundSortOrder.begin()+parentsList.size()+1);
-            std::vector<std::pair <std::string, double>> chartList =
-                    funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
+        QString clickedName = ii.data(Qt::DisplayRole).toString();
+        if (ii.column()!=0) { continue;}
 
-            if (!chartList.empty()) {
-                ui->fundBarChart->clearPlottables();
-                setupBarChart(ui->fundBarChart, chartList);
-                ui->fundBarChart->replot();
-
-                setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
-                setupBoxPlot(ui->fundBoxPlot, chartList);
-                setupLineChart(ui->fundLineGraph,chartList);
-
-                if (parentsList.size()>1) {
-                    ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
-                                                QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
-                } else {
-                    ui->fundGraphTitle->setText("Total Grants & Funding by " + QString::fromStdString(parentsList[0]));
-                }
-                ui->fund_graph_stackedWidget->show();
+        std::vector<std::string> parentsList;
+        QModelIndex current = ii;
+        QString name;
+        while (true) {
+            name = current.data(Qt::DisplayRole).toString();
+            if(name!="") {
+                auto it = parentsList.begin();
+                it = parentsList.insert(it, name.toStdString());
+            } else {
+                break;
             }
-        } else {
-            ui->fund_graph_stackedWidget->hide();
-            ui->fundGraphTitle->clear();
-            fundClickedName.clear();
+            current = current.parent();
         }
+
+        if (parentsList.size()!=fundSortOrder.size()) {
+            //if (clickedName != fundClickedName) {
+                fundClickedName = clickedName;
+                std::vector<std::string> sortOrder(fundSortOrder.begin(), fundSortOrder.begin()+parentsList.size()+1);
+
+                std::vector<std::pair <std::string, double>> list =
+                        funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
+
+                bool foundSameOne = 0;
+                for (int i = 0; i < (int) list.size(); i++) {
+                    for (int j=0;j<(int)chartList.size();j++) {
+                        if (chartList[j].first == list[i].first) {
+                            foundSameOne = 1;
+                            chartList[j].second += static_cast<double>(list[i].second);
+                            break;
+                        }
+                    }
+                    if (!foundSameOne)
+                        chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
+                }
+
+                selectedNum++;
+
+                if (!chartList.empty()) {
+                    ui->fundBarChart->clearPlottables();
+                    setupBarChart(ui->fundBarChart, chartList);
+                    ui->fundBarChart->replot();
+
+                    setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
+                    setupBoxPlot(ui->fundBoxPlot, chartList);
+                    setupLineChart(ui->fundLineGraph,chartList);
+
+                    if (selectedNum > 1) {
+                        ui->fundGraphTitle->setText("Multiple Selection.");
+                    }
+                    else {
+                        if (parentsList.size()>1) {
+                            ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
+                                                        QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                        } else {
+                            ui->fundGraphTitle->setText("Total Grants & Funding by " + QString::fromStdString(parentsList[0]));
+                        }
+                    }
+
+
+                    ui->fund_graph_stackedWidget->show();
+                }
+
+        } else {
+        ui->fund_graph_stackedWidget->hide();
+        ui->fundGraphTitle->clear();
+        fundClickedName.clear();
+    }
     }
 }
 
