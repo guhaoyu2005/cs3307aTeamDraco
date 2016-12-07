@@ -126,6 +126,8 @@ private slots:
 
 //    void on_teach_stat_button_toggled(bool checked);
 
+    void on_teachTreeView_pressed(const QModelIndex &index);
+
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
 
