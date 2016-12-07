@@ -344,7 +344,7 @@ void ErrorEditDialog::on_tableWidget_itemChanged(QTableWidgetItem *item)
             }
             else {
                 FixedErrorCounter++;
-                ui->ErrorDisplayLbl->setText("Error Fixed: "+ QString::number(FixedErrorCounter) +" Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
+                ui->ErrorDisplayLbl->setText("Errors Fixed: "+ QString::number(FixedErrorCounter) +" Remaining: " + QString::number(ErrorCounter-FixedErrorCounter));
             }
             break;
         }

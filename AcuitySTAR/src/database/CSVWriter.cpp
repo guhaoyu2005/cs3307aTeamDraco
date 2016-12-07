@@ -11,7 +11,7 @@ CSVWriter::CSVWriter(){
 }
 
 /*
- * FUNCTION FOR SURVIVNG THIS SHIT
+ * FUNCTION FOR SAVING
  */
 bool CSVWriter::writeToCSVDueToShitCodeForGrantShits(std::string path, vector<string> header, vector<vector<string>> data) {
     createBackup(path);

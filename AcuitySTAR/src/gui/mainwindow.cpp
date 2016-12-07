@@ -31,10 +31,11 @@
 //Persistence - Team Draco 2016
 #define PREVIOUS_FILES_SAVE "previousfiles.dat"
 
-std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date"};
-std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
-std::vector<std::string> MainWindow::PUBS_MANFIELDS = {"Member Name", "Type", "Status Date", "Role", "Title"};
-std::vector<std::string> MainWindow::TEACH_MANFIELDS = {"Member Name", "Start Date", "Program"};
+std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {
+    "Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date", "Division"};
+std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title", "Division"};
+std::vector<std::string> MainWindow::PUBS_MANFIELDS = {"Member Name", "Type", "Status Date", "Role", "Title", "Division"};
+std::vector<std::string> MainWindow::TEACH_MANFIELDS = {"Member Name", "Start Date", "Program", "Division"};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow),
@@ -194,7 +195,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypeTeaching: {
                     if (checkTargetTabHasFileLoaded(TEACH)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded teach file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -208,7 +209,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypePublications: {
                     if (checkTargetTabHasFileLoaded(PUBLICATIONS)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded publication file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -221,7 +222,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypePresentations: {
                     if (checkTargetTabHasFileLoaded(PRESENTATIONS)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded presentation file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -234,7 +235,7 @@ void MainWindow::loadFileAndSwitchToProperTab() {
                 case CSVReader::CSVFileTypeGrants: {
                     if (checkTargetTabHasFileLoaded(FUNDING)) {
                         QMessageBox::StandardButton msgbox;
-                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will lose.", QMessageBox::Yes|QMessageBox::No);
+                        msgbox = QMessageBox::question(this, "Info", "Already loaded funding file, continue? \nAll unsaved work will be lost.", QMessageBox::Yes|QMessageBox::No);
                         if (msgbox == QMessageBox::No) {
                             //do nothing and return
                             return;
@@ -556,7 +557,7 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
     switch (tabIndex) {
     case FUNDING:
         // specify default sort order
-        defaultOrder << "Member Name" << "Funding Type" << "Peer Reviewed?" << "Status" << "Role" << "Title";
+        defaultOrder << "Division" << "Member Name" << "Funding Type" << "Peer Reviewed?" << "Status" << "Role" << "Title";
 
         // add default list to member variable
         allFundOrders << defaultOrder;
@@ -570,7 +571,7 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         break;
     case PRESENTATIONS:
         // specify default sort order
-        defaultOrder << "Member Name" << "Type" << "Role" << "Title";
+        defaultOrder << "Division" << "Member Name" << "Type" << "Role" << "Title";
 
         // add default list to member variable
         allPresOrders << defaultOrder;
@@ -584,7 +585,7 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         break;
     case PUBLICATIONS:
         // specify default sort order
-        defaultOrder << "Member Name" << "Type" << "Role" << "Title";
+        defaultOrder << "Division" << "Member Name" << "Program";
 
         // add default list to member variable
         allPubOrders << defaultOrder;

@@ -2039,6 +2039,12 @@ p, li { white-space: pre-wrap; }
                     <height>851</height>
                    </rect>
                   </property>
+                  <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
                  </widget>
                 </widget>
                </widget>
