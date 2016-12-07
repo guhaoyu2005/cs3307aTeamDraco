@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Draco Galaxy</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -31,6 +31,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Segoe UI</family>
       <pointsize>24</pointsize>
      </font>
     </property>
@@ -38,7 +39,8 @@
      <string>Get Started</string>
     </property>
     <property name="icon">
-     <iconset theme="none"/>
+     <iconset theme="none">
+      <normaloff>.</normaloff>.</iconset>
     </property>
    </widget>
    <widget class="QLabel" name="label">
