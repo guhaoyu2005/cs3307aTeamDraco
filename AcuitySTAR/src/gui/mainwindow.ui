@@ -42,7 +42,7 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="1" column="0">
+    <item row="0" column="0">
      <widget class="QFrame" name="frame">
       <property name="autoFillBackground">
        <bool>false</bool>
@@ -220,7 +220,7 @@ p, li { white-space: pre-wrap; }
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -305,17 +305,11 @@ p, li { white-space: pre-wrap; }
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="midLineWidth">
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>1</number>
                 </property>
                 <widget class="QCustomPlot" name="teach_stat_page">
                  <layout class="QGridLayout" name="gridLayout_25">
@@ -344,8 +338,20 @@ p, li { white-space: pre-wrap; }
                     <x>10</x>
                     <y>10</y>
                     <width>551</width>
-                    <height>851</height>
+                    <height>500</height>
                    </rect>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>350</width>
+                    <height>0</height>
+                   </size>
                   </property>
                  </widget>
                 </widget>
@@ -984,7 +990,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="pub_pie_page">
                  <layout class="QGridLayout" name="gridLayout_18">
@@ -1070,7 +1076,7 @@ p, li { white-space: pre-wrap; }
                     <x>9</x>
                     <y>9</y>
                     <width>561</width>
-                    <height>861</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
@@ -1082,13 +1088,19 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </widget>
                 <widget class="QWidget" name="pub_stat_page">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <widget class="QCustomPlot" name="pubBoxPlot" native="true">
                   <property name="geometry">
                    <rect>
                     <x>10</x>
                     <y>10</y>
                     <width>551</width>
-                    <height>851</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
@@ -1097,9 +1109,21 @@ p, li { white-space: pre-wrap; }
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>350</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                  </widget>
                 </widget>
                 <widget class="QWidget" name="pub_bar_page">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <layout class="QGridLayout" name="gridLayout_19">
                   <item row="1" column="0">
                    <widget class="QCustomPlot" name="pubBarChart" native="true">
@@ -1879,12 +1903,6 @@ p, li { white-space: pre-wrap; }
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="midLineWidth">
                  <number>0</number>
                 </property>
@@ -1975,7 +1993,7 @@ p, li { white-space: pre-wrap; }
                     <x>10</x>
                     <y>10</y>
                     <width>551</width>
-                    <height>861</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
@@ -2036,15 +2054,15 @@ p, li { white-space: pre-wrap; }
                     <x>10</x>
                     <y>10</y>
                     <width>551</width>
-                    <height>851</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
-                                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                                   <horstretch>0</horstretch>
-                                   <verstretch>0</verstretch>
-                                  </sizepolicy>
-                                 </property>
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                  </widget>
                 </widget>
                </widget>
@@ -2097,12 +2115,6 @@ p, li { white-space: pre-wrap; }
                <widget class="QStackedWidget" name="fund_graph_stackedWidget">
                 <property name="enabled">
                  <bool>false</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
                 </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
@@ -2200,7 +2212,7 @@ p, li { white-space: pre-wrap; }
                     <x>9</x>
                     <y>9</y>
                     <width>561</width>
-                    <height>861</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
@@ -2218,7 +2230,7 @@ p, li { white-space: pre-wrap; }
                     <x>10</x>
                     <y>10</y>
                     <width>551</width>
-                    <height>861</height>
+                    <height>500</height>
                    </rect>
                   </property>
                   <property name="sizePolicy">
