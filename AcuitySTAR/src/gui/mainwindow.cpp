@@ -1628,7 +1628,7 @@ bool MainWindow::load_serialized_paths(QString path) {
             } else {
                 qDebug() << "Not Loading Previous Files Clearing Data file";
                 //Do Nothing Clear Previous Paths Data
-                serialize_loaded_paths(PEVIOUS_FILES_SAVE);
+                serialize_loaded_paths(path);
             }
         }
 
