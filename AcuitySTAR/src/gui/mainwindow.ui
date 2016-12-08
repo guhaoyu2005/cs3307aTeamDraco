@@ -309,7 +309,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QCustomPlot" name="teach_stat_page">
                  <layout class="QGridLayout" name="gridLayout_25">
@@ -332,28 +332,24 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="teach_line_graph">
-                 <widget class="QCustomPlot" name="teachLineGraph" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>551</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>350</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_12">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="teachLineGraph" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>350</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="teach_pie_page">
                  <layout class="QGridLayout" name="gridLayout_10">
@@ -990,7 +986,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="pub_pie_page">
                  <layout class="QGridLayout" name="gridLayout_18">
@@ -1070,52 +1066,44 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="pub_line_page">
-                 <widget class="QCustomPlot" name="pubLineGraph" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>9</x>
-                    <y>9</y>
-                    <width>561</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_14">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="pubLineGraph" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="pub_stat_page">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <widget class="QCustomPlot" name="pubBoxPlot" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>551</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>350</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_22">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="pubBoxPlot" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>350</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="pub_bar_page">
                  <property name="sizePolicy">
@@ -1987,22 +1975,18 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="pres_stat_page">
-                 <widget class="QCustomPlot" name="presBoxPlot" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>551</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_23">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="presBoxPlot" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="pres_bar_page">
                  <layout class="QGridLayout" name="gridLayout_8">
@@ -2048,22 +2032,18 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="pres_line_page">
-                 <widget class="QCustomPlot" name="presLineGraph" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>551</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_24">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="presLineGraph" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </widget>
               </item>
@@ -2126,7 +2106,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="fund_pie_page">
                  <layout class="QGridLayout" name="gridLayout_9">
@@ -2206,40 +2186,32 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QWidget" name="fund_line_Page">
-                 <widget class="QCustomPlot" name="fundLineGraph" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>9</x>
-                    <y>9</y>
-                    <width>561</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="fundLineGraph" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="fund_stat_page">
-                 <widget class="QCustomPlot" name="fundBoxPlot" native="true">
-                  <property name="geometry">
-                   <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>551</width>
-                    <height>500</height>
-                   </rect>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_27">
+                  <item row="0" column="0">
+                   <widget class="QCustomPlot" name="fundBoxPlot" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                 <widget class="QWidget" name="fund_bar_page">
                  <layout class="QGridLayout" name="gridLayout_15">
